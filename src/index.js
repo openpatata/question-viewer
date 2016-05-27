@@ -5,6 +5,7 @@ import ForerunnerDB from 'forerunnerdb';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'whatwg-fetch';
 
 import {Load} from './components/load.js';
 import {Main, searchScopes} from './components/main.js';
