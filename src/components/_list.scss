@@ -1,0 +1,32 @@
+
+.pagination,
+.question-list {
+  position: relative;
+  width: 650px;
+  margin: auto;
+  padding: 0 2em;
+  z-index: 5;
+}
+
+.pagination {
+  @extend %bulletless-list;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 2em;
+  text-align: right;
+
+  &__page {
+    flex-basis: 2em;
+    flex-shrink: 0;
+
+    a {
+      display: block;
+      cursor: pointer;
+      font-size: .8em;
+    }
+
+    &--current {
+      font-weight: bold;
+    }
+  }
+}
