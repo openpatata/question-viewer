@@ -8,7 +8,7 @@ import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
 
 import {Load} from './components/load.js';
-import {Main, searchScopes} from './components/main.js';
+import {Main} from './components/main.js';
 
 
 const db = window.db = (new ForerunnerDB()).db();

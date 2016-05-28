@@ -76,12 +76,12 @@ export class Main extends React.Component {
       params = {[searchScope]: new RegExp(searchValue, 'i')};
     }
 
-    let question_count = this.props.db.count(params);
-    let pages = _.range(_.ceil(question_count / 20));
+    let questionCount = this.props.db.count(params);
+    let pages = _.range(_.ceil(questionCount / 20));
     this.setState({
       page: page,
       pages: pages,
-      question_count: question_count,
+      questionCount: questionCount,
       questions: this.props.db.find(params, filters)
     });
   }
@@ -94,7 +94,7 @@ export class Main extends React.Component {
           initialSearchValue={this.state.initialSearchValue}
           pushToValue={this.pushToValue}
           pushToScope={this.pushToScope}
-          resultCount={this.state.question_count}/>
+          resultCount={this.state.questionCount}/>
         <List
           pushToPage={this.pushToPage}
           page={this.state.page}
