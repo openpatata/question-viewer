@@ -28,7 +28,10 @@
         </ul>
       </nav>
     </header>
-    <main>
+    <main data-questions-url="<%=
+        webpack.assets[_.findIndex(webpack.assets,
+                                   o => _.startsWith(o.name, 'questions.'))].name
+      %>">
     </main>
   </body>
 </html>

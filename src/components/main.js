@@ -76,13 +76,13 @@ export class Main extends React.Component {
       params = {[searchScope]: new RegExp(searchValue, 'i')};
     }
 
-    let questionCount = this.props.db.count(params);
+    let questionCount = this.props.col.count(params);
     let pages = _.range(_.ceil(questionCount / 20));
     this.setState({
       page: page,
       pages: pages,
       questionCount: questionCount,
-      questions: this.props.db.find(params, filters)
+      questions: this.props.col.find(params, filters)
     });
   }
 
