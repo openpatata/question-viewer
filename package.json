@@ -18,14 +18,16 @@
     "postcss-svgo": "^2.1.2",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
-    "webpack": "^1.12.14"
+    "webpack": "^1.12.14",
+    "webpack-dev-server": "^1.14.1"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.babel.js --optimize-minimize",
+    "build": "webpack --config webpack.config.babel.js",
     "deploy": "gh-pages -d dist",
-    "watch": "webpack --config webpack.config.babel.js --watch"
+    "watch": "webpack-dev-server --config webpack.config.babel.js"
   },
   "dependencies": {
+    "d3": "^4.0.0-alpha.44",
     "forerunnerdb": "^1.3.769",
     "lodash": "^4.13.1",
     "marked": "^0.3.5",

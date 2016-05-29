@@ -1,12 +1,15 @@
 
+import _ from 'lodash';
+
+import webpack from 'webpack';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+
 import autoprefixer from 'autoprefixer';
 import assets from 'postcss-assets';
 import svgo from 'postcss-svgo';
 
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-
-export default {
+let config = {
   entry: './src/index',
   output: {path: './dist', filename: 'bundle.js'},
   plugins: [
@@ -19,3 +22,18 @@ export default {
   ]},
   postcss: [assets(), autoprefixer(), svgo()]
 }
+
+if (process.env.NODE_ENV === 'production') {
+  config = _.mergeWith(config, {
+    plugins: [
+      new webpack.DefinePlugin({'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`}),
+      new webpack.optimize.UglifyJsPlugin()
+    ]
+  }, (objValue, srcValue) => _.isArray(objValue) && objValue.concat(srcValue));
+} else {
+  config = _.merge(config, {
+    devtool: 'eval-source-map', devServer: {contentBase: './build'}
+  });
+}
+
+export {config as default};
