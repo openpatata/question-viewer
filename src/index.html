@@ -9,6 +9,9 @@
     <title>Ερωτήσεις Κυπρίων Βουλευτών</title>
   </head>
   <body>
+    <noscript>
+      <p>Η JavaScript είναι απαραίτητη για τη λειτουργία της ιστοσελίδας.</p>
+    </noscript>
     <header class="site-header">
       <div>
         <h1 class="page-title">ΕΡΩΤΗΣΕΙΣ ΒΟΥΛΕΥΤΩΝ</h1>
@@ -28,7 +31,10 @@
         </ul>
       </nav>
     </header>
-    <main data-questions-url="<%=
+    <main data-mps-url="<%=
+        webpack.assets[_.findIndex(webpack.assets,
+                                   o => _.startsWith(o.name, 'mps.'))].name
+      %>" data-questions-url="<%=
         webpack.assets[_.findIndex(webpack.assets,
                                    o => _.startsWith(o.name, 'questions.'))].name
       %>">

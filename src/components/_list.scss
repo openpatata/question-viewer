@@ -13,14 +13,12 @@
   display: flex;
   flex-wrap: wrap;
   margin-top: 2em;
-  text-align: right;
 
   &__page {
     flex-basis: 2em;
     flex-shrink: 0;
 
     a {
-      display: block;
       cursor: pointer;
       font-size: .8em;
     }

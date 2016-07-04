@@ -1,19 +1,21 @@
 
 import './index.scss';
+import './../build/mps.json';
 import './../build/questions.json';
 
 import ForerunnerDB from 'forerunnerdb';
-
 import React from 'react';
-import ReactDOM from 'react-dom';
-import 'whatwg-fetch';
+import {render} from 'react-dom';
+import {hashHistory} from 'react-router';
 
-import {Load} from './components/load.js';
-import {Main} from './components/main.js';
+import {Main} from './components/main';
 
 
-const db = window.db = (new ForerunnerDB()).db(),
-  col = db.collection('questions'), main = document.querySelector('main');
-ReactDOM.render(<Load/>, main) && fetch(main.dataset.questionsUrl)
-  .then(res => res.json()).catch(e => console.error(e))
-  .then(json => col.insert(json, () => ReactDOM.render(<Main col={col}/>, main)));
+export const db = window.db = (new ForerunnerDB()).db();
+const elMain    = document.querySelector('main');
+
+render((
+    <Main
+      history={hashHistory}
+      mpsUrl={elMain.dataset.mpsUrl} questionsUrl={elMain.dataset.questionsUrl}/>
+  ), elMain);

@@ -2,6 +2,8 @@
 import marked from 'marked';
 import React from 'react';
 
+import {db} from '../index';
+
 
 class QuestionHeader extends React.Component {
   render() {
@@ -16,8 +18,8 @@ class QuestionHeader extends React.Component {
           <li aria-label="Ερωτώντες" className="question-details__authors">
             <ul>
               {this.props.data.by.map(author => (
-                <li key={this.props.data._id + author}>
-                  <a onClick={this.props.fillFromLink}>{author}</a>
+                <li key={this.props.data._id + author.mp_id}>
+                  <a onClick={this.props.fillFromLink}>{db.collection('mps').findById(author.mp_id).name.el}</a>
                 </li>
                ))}
             </ul>
@@ -36,7 +38,7 @@ class QuestionHeader extends React.Component {
           {this.props.data.identifier}
         </div>
       </aside>
-    )
+    );
   }
 }
 
