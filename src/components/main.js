@@ -100,7 +100,12 @@ export class Main extends React.Component {
           page={this.state.page}
           pages={this.state.pages}
           questions={this.state.questions}/>
-      </div>
+          <Pager
+            initialPage={this.state.initialPage}
+            page={this.state.page}
+            pages={this.state.pages}
+            updateHash={this.updateHash} />
+        </div>
     );
   }
 }
