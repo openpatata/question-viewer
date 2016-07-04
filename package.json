@@ -24,7 +24,7 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.babel.js",
-    "deploy": "gh-pages -d dist",
+    "deploy": "gh-pages -d question-viewer",
     "watch": "webpack-dev-server --config webpack.config.babel.js"
   },
   "dependencies": {

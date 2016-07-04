@@ -11,7 +11,7 @@ import svgo from 'postcss-svgo';
 
 let config = {
   entry: './src/index',
-  output: {path: './dist', filename: 'bundle.[hash].js'},
+  output: {path: './question-viewer', filename: 'bundle.[hash].js'},
   plugins: [
     new HtmlWebpackPlugin({template: './src/index.html'})
   ],
@@ -21,7 +21,7 @@ let config = {
     {test: /\.scss$/, loader: 'style!css!postcss!sass'}
   ]},
   postcss: [assets(), autoprefixer(), svgo()]
-}
+};
 
 if (process.env.NODE_ENV === 'production') {
   config = _.mergeWith(config, {
