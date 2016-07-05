@@ -1,7 +1,6 @@
 
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import ReactDOM from 'react-dom';
 import 'whatwg-fetch';
 
 import {Form} from './form';
@@ -10,7 +9,7 @@ import {Load} from './load';
 import {db} from '../index';
 
 
-const insertAsync = (col, data) => new Promise((resolve) => {
+const insertAsync = (col, data) => new Promise(resolve => {
   db.collection(col).insert(data, resolve);
 });
 
@@ -46,7 +45,7 @@ export const Main = React.createClass({
 
   updateHash(values = {}) {
     this.props.history.push({query: Object.assign({}, this.query, values)});
-    this.refreshData();
+    this.setState({questions: null}, this.refreshData);
   },
 
   refreshData({page = 0, searchScope = 'all', searchValue = null} = this.query) {
@@ -70,15 +69,17 @@ export const Main = React.createClass({
       params = {[searchScope]: new RegExp(searchValue, 'i')};
     }
 
-    let questionCount = db.collection('questions').count(params);
-    let pages = Math.ceil(questionCount / 20);
-    this.setState({
-      docTitle: `Ερωτήσεις Κυπρίων Βουλευτών${searchValue ? `: ${searchValue}`
-                                                          : ''}`,
-      page: parseInt(page),
-      pages: pages,
-      questionCount: questionCount,
-      questions: db.collection('questions').find(params, filters)
+    (new Promise(resolve => window.setTimeout(() => resolve([
+      db.collection('questions').count(params),
+      db.collection('questions').find(params, filters)
+    ]), 0))).then(([questionCount, questions]) => {
+      this.setState({
+        docTitle: `Ερωτήσεις Κυπρίων Βουλευτών${searchValue ? `: ${searchValue}` : ''}`,
+        page: parseInt(page),
+        pages: Math.ceil(questionCount / 20),
+        questionCount: questionCount,
+        questions: questions
+      });
     });
   },
 
@@ -93,12 +94,16 @@ export const Main = React.createClass({
             initialSearchValue={this.query.searchValue}
             questionCount={this.state.questionCount}
             updateHash={this.updateHash} />
-          <List questions={this.state.questions} />
-          <Pager
-            initialPage={this.state.initialPage}
-            page={this.state.page}
-            pages={this.state.pages}
-            updateHash={this.updateHash} />
+          {this.state.questions
+            ? <div>
+                <List questions={this.state.questions} />
+                <Pager
+                  initialPage={this.state.initialPage}
+                  page={this.state.page}
+                  pages={this.state.pages}
+                  updateHash={this.updateHash} />
+              </div>
+            : <Load />}
         </div>
       </DocumentTitle>
     );
