@@ -1,5 +1,5 @@
 
-.pagination,
+.list-controls,
 .question-list {
   position: relative;
   width: 650px;
@@ -12,7 +12,7 @@
   @extend %bulletless-list;
   display: flex;
   flex-wrap: wrap;
-  margin-top: 2em;
+  margin: 0;
 
   &__page {
     flex-basis: 2em;
@@ -25,6 +25,20 @@
 
     &--current {
       font-weight: bold;
+    }
+  }
+}
+
+.list-controls {
+
+
+  &__result-count {
+    float: right;
+    margin: 0;
+    color: #333;
+
+    span {
+      font-size: .9em;
     }
   }
 }

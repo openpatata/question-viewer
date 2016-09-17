@@ -1,29 +1,21 @@
 
 .question {
-  border: 1px solid;
 
-  & + & {
-    border-top: none;
-  }
 
   &:first-child {
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
   }
 
-  &:last-child {
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-  }
-
   &--answered {
     background-color: #e9fcea;
 
-    &, .question-id {
-      border-color: darken(#e9fcea, 10%);
+    .question-text {
+      border-color: #e9fcea;
     }
 
     .question-id {
+      background-color: darken(#e9fcea, 3%);
       color: darken(#e9fcea, 50%);
     }
   }
@@ -31,13 +23,19 @@
   &--unanswered {
     background-color: #fce9f0;
 
-    &, .question-id {
-      border-color: darken(#fce9f0, 10%);
+
+    .question-text {
+      border-color: #fce9f0;
     }
 
     .question-id {
+      background-color: darken(#fce9f0, 3%);
       color: darken(#fce9f0, 50%);
     }
+  }
+
+  &:not(:last-child) .question-text {
+    border-bottom: 0;
   }
 
   h2 {
@@ -50,16 +48,20 @@
   line-height: 5;
 }
 
-.question-details,
+.question-metadata,
 .question-id {
   flex: 0;
   padding: 0 1.5em;
 }
 
-.question-details {
+.question-metadata {
   @include inline-list;
   flex-basis: 65%;
   margin: 0;
+
+  > * {
+    font-size: .9em;
+  }
 
   &__date {}
 
@@ -72,7 +74,7 @@
   }
 
   &__answers {
-
+    font-weight: bold;
 
     ul {
       @include inline-list(.5em);
@@ -83,12 +85,13 @@
 .question-id {
   flex-basis: 35%;
   font-weight: bold;
-  border-left: 1px solid;
   padding-left: 1.5em;
   text-align: center;
 }
 
 .question-text {
+  border: 1px solid;
+  border-top: 0;
   padding: 1em 1.5em;
   background-color: #fff;
 }

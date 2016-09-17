@@ -1,34 +1,39 @@
 
-import marked from 'marked';
-import React from 'react';
+import marked from 'marked'
+import React from 'react'
 
-import {db} from '../index';
 
+const abbreviateFirstName = name => {
+  const nameParts = name.split(' ')
+  return nameParts.slice(0, (nameParts.length - 1))
+                  .concat([`${nameParts[nameParts.length - 1][0]}.`])
+                  .join(' ')
+}
 
 class QuestionHeader extends React.Component {
   render() {
     return (
       <aside className="question-header">
-        <ul className="question-details">
-          <li aria-label="Ημερομηνία" className="question-details__date">
-            <time>
-              <a onClick={this.props.fillFromLink}>{this.props.data.date}</a>
+        <ul className="question-metadata">
+          <li aria-label="Ημερομηνία" className="question-metadata__date">
+            <time dateTime={this.props.data.date}>
+              {this.props.data.date.split('-').reverse().join('/')}
             </time>
           </li>
-          <li aria-label="Ερωτώντες" className="question-details__authors">
+          <li aria-label="Ερωτώντες" className="question-metadata__authors">
             <ul>
-              {this.props.data.by.map(author => (
+              {this.props.data.__byFull.map(author => (
                 <li key={this.props.data._id + author.mp_id}>
-                  <a onClick={this.props.fillFromLink}>{db.collection('mps').findById(author.mp_id).name.el}</a>
+                  {abbreviateFirstName(author.name.el)}
                 </li>
                ))}
             </ul>
           </li>
-          <li aria-label="Απαντήσεις" className="question-details__answers">
+          <li aria-label="Απαντήσεις" className="question-metadata__answers">
             <ul>
               {this.props.data.answers.map((answer, index) => (
                 <li key={this.props.data._id + answer}>
-                  <a href={answer} rel="external">{index + 1}</a>
+                  <a href={answer} rel="external">Α</a>
                 </li>
               ))}
             </ul>
@@ -38,7 +43,7 @@ class QuestionHeader extends React.Component {
           {this.props.data.identifier}
         </div>
       </aside>
-    );
+    )
   }
 }
 
@@ -55,6 +60,6 @@ export class Question extends React.Component {
           dangerouslySetInnerHTML={{__html: marked(this.props.data.text.toString())}}
           />
       </article>
-    );
+    )
   }
 }

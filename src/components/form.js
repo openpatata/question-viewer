@@ -1,19 +1,18 @@
 
-import _ from 'lodash';
-import React from 'react';
+import ld from 'lodash'
+import React from 'react'
+
+import {TimeSeries} from './timeSeries'
 
 
 export const Form = React.createClass({
-  debounce: _.debounce((that, v) => that.props.updateHash({page: 0, searchValue: v}), 500),
+  debounce: ld.debounce((that, v) => that.props.updateHash({page: 0, searchValue: v}), 500),
 
   render() {
     return (
       <div className="question-form">
-        <p className="question-form__results-info-text">
-          {this.props.questionCount}{`${this.props.questionCount == 1
-                                      ? " αποτέλεσμα"
-                                      : " αποτελέσματα"}`}
-        </p>
+        <TimeSeries questions={this.props.questions}
+                    questionDates={this.props.questionDates}/>
         <div className="question-form__search-array">
           <input
               type="search"
@@ -32,6 +31,6 @@ export const Form = React.createClass({
           </select>
         </div>
       </div>
-    );
+    )
   }
-});
+})
