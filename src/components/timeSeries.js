@@ -10,23 +10,33 @@ d3.timeFormatDefaultLocale({
   shortDays: days, months: months, shortMonths: months
 })
 
+const margin = {top: 10, right: 0, bottom: 30, left: 0}
+const width = 590 - margin.left - margin.right
+const height = 180 - margin.top - margin.bottom
+
+const selectRange = dateDiff => {
+  if (dateDiff < (31622400000 * 1.5)) {
+    return d3.timeMonth
+  } else if (dateDiff < (2592000000 * 1.5)) {
+    return d3.timeWeek
+  } else {
+    return d3.timeYear
+  }
+}
+
 export const TimeSeries = React.createClass({
   shouldComponentUpdate(props) {
-    const margin = {top: 10, right: 0, bottom: 30, left: 0},
-      width = 590 - margin.left - margin.right,
-      height = 180 - margin.top - margin.bottom
-
     const questionDates = props.questionDates.map(i => new Date(i.date))
-    const formatCount = d3.format(",.0f")
+    const [xMin, xMax] = d3.extent(questionDates)
 
     const x = d3.scaleTime()
-      .domain(d3.extent(questionDates))
+      .domain([xMin, xMax])
       .range([0, width])
     const y = d3.scaleLinear()
       .range([height, 0])
-    const histogram = d3.histogram()
-      .domain(x.domain()).thresholds(x.ticks(d3.timeYear))
-    const bins = histogram(questionDates)
+    const bins = d3.histogram()
+      .domain(x.domain())
+      .thresholds(x.ticks(selectRange(xMax - xMin)))(questionDates)
     y.domain([0, d3.max(bins, d => d.length)])
 
     d3.select(this.refs.chart).select('svg').remove()
@@ -55,7 +65,7 @@ export const TimeSeries = React.createClass({
       .attr('y', 6)
       .attr('x', d => (x(d.x1) - x(d.x0)) / 2)
       .attr('text-anchor', 'middle')
-      .text(d => formatCount(d.length))
+      .text(d => d.length)
 
     return false
   },
