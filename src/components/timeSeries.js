@@ -3,6 +3,13 @@ import * as d3 from 'd3'
 import React from 'react'
 
 
+const days = ['Κυρ', 'Δευ', 'Τρί', 'Τετ', 'Πέμ', 'Παρ', 'Σάβ']
+const months = ['Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μαΐ', 'Ιουν', 'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοε', 'Δεκ']
+d3.timeFormatDefaultLocale({
+  date: '%d/%m/%y', time: '%H:%M:%S', days: days, periods: ['π.μ.', 'μ.μ.'],
+  shortDays: days, months: months, shortMonths: months
+})
+
 export const TimeSeries = React.createClass({
   shouldComponentUpdate(props) {
     const margin = {top: 10, right: 0, bottom: 30, left: 0},
