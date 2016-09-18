@@ -15,16 +15,14 @@ class QuestionHeader extends React.Component {
     return (
       <aside className="question-header">
         <ul className="question-metadata">
-          <li aria-label="Ημερομηνία" className="question-metadata__date">
-            <time dateTime={this.props.data.date}>
-              {this.props.data.date.split('-').reverse().join('/')}
-            </time>
-          </li>
           <li aria-label="Ερωτώντες" className="question-metadata__authors">
             <ul>
               {this.props.data.__byFull.map(author => (
-                <li key={this.props.data._id + author.mp_id}>
-                  {abbreviateFirstName(author.name.el)}
+                <li key={author._id}>
+                  <div className="author__image">
+                    {author.image ? <img src={author.image.replace('imageoriginal', 'imagesmall')} /> : ''}
+                  </div>
+                  <div className="author__name">{abbreviateFirstName(author.name.el)}</div>
                 </li>
                ))}
             </ul>
@@ -37,6 +35,11 @@ class QuestionHeader extends React.Component {
                 </li>
               ))}
             </ul>
+          </li>
+          <li aria-label="Ημερομηνία" className="question-metadata__date">
+            <time dateTime={this.props.data.date}>
+              {this.props.data.date.split('-').reverse().join('/')}
+            </time>
           </li>
         </ul>
         <div aria-label="Αριθμός" className="question-id">

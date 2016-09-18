@@ -3,7 +3,7 @@ import React from 'react'
 import DocumentTitle from 'react-document-title'
 import 'whatwg-fetch'
 
-import {Form} from './form'
+import {ListForm} from './form'
 import {List, ListControls} from './list'
 import {Load} from './load'
 import {db} from '../index'
@@ -54,11 +54,11 @@ export const Main = React.createClass({
         let regex = new RegExp(searchValue, 'i')
         if (searchScope === 'all') {
           return {
-            $or: [
-              'date', 'identifier', 'text'
-            ].map(v => ({[v]: regex}))
-             .concat({by: {mp_id: db.collection('mps').find({name: {el: regex}})
-                                                      .map(mp => mp._id)}})
+            $or: ['date', 'identifier', 'text']
+              .map(v => ({[v]: regex}))
+              .concat({by: {
+                mp_id: db.collection('mps').find({name: {el: regex}}).map(mp => mp._id)
+              }})
           }
         } else if (searchScope === 'by') {
           return {[searchScope]: {
@@ -108,13 +108,13 @@ export const Main = React.createClass({
             page={this.state.page}
             pages={this.state.pages}
             updateHash={this.updateHash} />
-          <Form
+          <ListForm
             initialSearchScope={this.query.searchScope}
             initialSearchValue={this.query.searchValue}
             questions={this.state.questions}
             questionDates={this.state.questionDates}
             updateHash={this.updateHash} />
-          {this.state.questions ? <div><List questions={this.state.questions} /></div> : <Load />}
+          {this.state.questions ? <List questions={this.state.questions} /> : <Load />}
         </div>
       </DocumentTitle>
     )

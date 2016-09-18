@@ -5,7 +5,7 @@ import React from 'react'
 import {TimeSeries} from './timeSeries'
 
 
-export const Form = React.createClass({
+export const ListForm = React.createClass({
   debounce: ld.debounce((that, v) => that.props.updateHash({page: 0, searchValue: v}), 500),
 
   render() {

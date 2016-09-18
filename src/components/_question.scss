@@ -14,8 +14,14 @@
       border-color: #e9fcea;
     }
 
-    .question-id {
+    .question-id,
+    .author__image {
       background-color: darken(#e9fcea, 3%);
+    }
+
+    .question-id,
+    .author__image,
+    .author__name {
       color: darken(#e9fcea, 50%);
     }
   }
@@ -28,8 +34,14 @@
       border-color: #fce9f0;
     }
 
-    .question-id {
+    .question-id,
+    .author__image {
       background-color: darken(#fce9f0, 3%);
+    }
+
+    .question-id,
+    .author__image,
+    .author__name {
       color: darken(#fce9f0, 50%);
     }
   }
@@ -56,6 +68,9 @@
 
 .question-metadata {
   @include inline-list;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   flex-basis: 65%;
   margin: 0;
 
@@ -63,13 +78,19 @@
     font-size: .9em;
   }
 
-  &__date {}
+  &__date {
+    color: #333;
+  }
 
   &__authors {
 
 
     ul {
       @include inline-list(.5em);
+
+      li {
+        position: relative;
+      }
     }
   }
 
@@ -94,4 +115,29 @@
   border-top: 0;
   padding: 1em 1.5em;
   background-color: #fff;
+}
+
+
+.author {
+  &__image {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    width:  3em;
+    height: 3em;
+    overflow: hidden;
+    clip-path: ellipse(50% at center);
+    border: 1px solid;
+    border-radius: 50%;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  &__name {
+    margin-left: 3.5em;
+  }
 }
