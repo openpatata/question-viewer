@@ -30,6 +30,7 @@ function fetchData({page = 0, searchScope = 'all', searchValue = null}) {
   return new Promise(resolve => setTimeout(() => {
     const params = !searchValue ? {} : (() => {
       const regex = new RegExp(searchValue, 'i')
+
       if (searchScope === 'all') {
         return {
           $or: ['date', 'identifier', 'text']
@@ -58,14 +59,14 @@ function fetchData({page = 0, searchScope = 'all', searchValue = null}) {
         $limit: 20,
         $orderBy: {date: -1, _id: -1},
         $join: [{mps: {
-          $where: {$query: {_id: '$$.by.mp_id'}},
+          _id: 'by.mp_id',
           $as: '__byFull',
           $require: true,
           $multi: true
         }}]
       })
     })
-  }, 0))
+  }))
 }
 
 export const Main = withRouter(React.createClass({
