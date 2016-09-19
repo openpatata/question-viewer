@@ -29,13 +29,13 @@
   },
   "dependencies": {
     "d3": "^4.2.3",
-    "forerunnerdb": "^1.3.769",
-    "lodash": "^4.13.1",
+    "forerunnerdb": "^1.3.897",
+    "lodash": "^4.15.0",
     "marked": "^0.3.5",
-    "react": "^15.1.0",
-    "react-document-title": "^2.0.1",
-    "react-dom": "^15.1.0",
-    "react-router": "^2.4.1",
+    "react": "^15.3.1",
+    "react-document-title": "^2.0.2",
+    "react-dom": "^15.3.1",
+    "react-router": "^2.8.1",
     "whatwg-fetch": "^1.0.0"
   }
 }
