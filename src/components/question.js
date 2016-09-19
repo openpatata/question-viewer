@@ -12,64 +12,69 @@ function abbreviateFirstName(name) {
     .join(' ')
 }
 
-class QuestionHeader extends React.Component {
-  render() {
-    return (
-      <aside className="question-header">
-        <ul className="question-metadata">
-          <li aria-label="Ερωτώντες" className="question-metadata__authors">
-            <ul>
-              {this.props.data.__byFull.map(author => (
-                <li key={author._id}>
-                  <Link to={`/person/${author._id}`}>
-                    <div className="author__image">
-                      {author.image
-                       ? <img src={author.image.replace('imageoriginal', 'imagesmall')} />
-                       : ''}
-                    </div>
-                  </Link>
-                  <div className="author__name">
-                    {abbreviateFirstName(author.name.el)}
+function QuestionHeader(props) {
+  return (
+    <aside className="question-header">
+      <ul className="question-metadata">
+        <li aria-label="Ερωτώντες" className="question-metadata__authors">
+          <ul>
+            {props.data.__byFull.map(author => (
+              <li key={author._id}>
+                <Link to={`/person/${author._id}`}>
+                  <div className="author__image">
+                    {author.image
+                     ? <img src={author.image.replace('imageoriginal', 'imagesmall')} />
+                     : ''}
                   </div>
-                </li>
-               ))}
-            </ul>
-          </li>
-          <li aria-label="Απαντήσεις" className="question-metadata__answers">
-            <ul>
-              {this.props.data.answers.map((answer, index) => (
-                <li key={this.props.data._id + answer}>
-                  <a href={answer} rel="external">Α</a>
-                </li>
-              ))}
-            </ul>
-          </li>
-          <li aria-label="Ημερομηνία" className="question-metadata__date">
-            <time dateTime={this.props.data.date}>
-              {this.props.data.date.split('-').reverse().join('/')}
-            </time>
-          </li>
-        </ul>
-        <div aria-label="Αριθμός" className="question-id">
-          {this.props.data.identifier}
-        </div>
-      </aside>
-    )
-  }
+                </Link>
+                <div className="author__name">
+                  <Link to={{query: {searchScope: 'by',
+                                     searchValue: author.name.el}}}>
+                    {abbreviateFirstName(author.name.el)}
+                  </Link>
+                </div>
+              </li>
+             ))}
+          </ul>
+        </li>
+        <li aria-label="Απαντήσεις" className="question-metadata__answers">
+          <ul>
+            {props.data.answers.map((answer, index) => (
+              <li key={props.data._id + answer}>
+                <a href={answer} rel="external">Α</a>
+              </li>
+            ))}
+          </ul>
+        </li>
+        <li aria-label="Ημερομηνία" className="question-metadata__date">
+          <time dateTime={props.data.date}>
+            <Link to={{query: {searchScope: 'date',
+                               searchValue: props.data.date}}}>
+              {props.data.date.split('-').reverse().join('/')}
+            </Link>
+          </time>
+        </li>
+      </ul>
+      <div aria-label="Αριθμός" className="question-id">
+        <Link to={{query: {searchScope: 'identifier',
+                           searchValue: props.data.identifier}}}>
+          {props.data.identifier}
+        </Link>
+      </div>
+    </aside>
+  )
 }
 
-export class Question extends React.Component {
-  render() {
-    return (
-      <article
-          className={`question question--${this.props.data.answers.length === 0
-                                           ? "unanswered" : "answered"}`}>
-        <h2>{this.props.data.heading}</h2>
-        <QuestionHeader data={this.props.data}/>
-        <div
-          className="question-text"
-          dangerouslySetInnerHTML={{__html: marked(this.props.data.text.toString())}}/>
-      </article>
-    )
-  }
+export function Question(props) {
+  return (
+    <article
+        className={`question question--${props.data.answers.length === 0
+                                         ? "unanswered" : "answered"}`}>
+      <h2>{props.data.heading}</h2>
+      <QuestionHeader data={props.data}/>
+      <div
+        className="question-text"
+        dangerouslySetInnerHTML={{__html: marked(props.data.text.toString())}}/>
+    </article>
+  )
 }

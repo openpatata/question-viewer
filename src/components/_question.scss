@@ -19,9 +19,9 @@
       background-color: darken(#e9fcea, 3%);
     }
 
-    .question-id,
+    .question-id a,
     .author__image,
-    .author__name {
+    .author__name a {
       color: darken(#e9fcea, 50%);
     }
   }
@@ -39,9 +39,9 @@
       background-color: darken(#fce9f0, 3%);
     }
 
-    .question-id,
+    .question-id a,
     .author__image,
-    .author__name {
+    .author__name a {
       color: darken(#fce9f0, 50%);
     }
   }
@@ -78,7 +78,7 @@
     font-size: .9em;
   }
 
-  &__date {
+  &__date a {
     color: #333;
   }
 

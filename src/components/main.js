@@ -1,5 +1,7 @@
 
+import ld from 'lodash'
 import React from 'react'
+import {withRouter} from 'react-router'
 import DocumentTitle from 'react-document-title'
 import 'whatwg-fetch'
 
@@ -23,90 +25,88 @@ import {TimeSeries} from './timeSeries'
  *
  * And that's pretty much all there is to it.
  */
-export const Main = React.createClass({
-  componentWillMount() {
-    this.updateHash()
+
+function fetchData({page = 0, searchScope = 'all', searchValue = null}) {
+  return new Promise(resolve => setTimeout(() => {
+    const params = !searchValue ? {} : (() => {
+      const regex = new RegExp(searchValue, 'i')
+      if (searchScope === 'all') {
+        return {
+          $or: ['date', 'identifier', 'text']
+            .map(v => ({[v]: regex}))
+            .concat({by: {
+              mp_id: db.collection('mps').find({name: {el: regex}}).map(mp => mp._id)
+            }})
+        }
+      } else if (searchScope === 'by') {
+        return {[searchScope]: {
+          mp_id: db.collection('mps').find({name: {el: regex}}).map(mp => mp._id)
+        }}
+      } else {
+        return {[searchScope]: regex}
+      }
+    })()
+
+    return resolve({
+      page: parseInt(page),
+      searchScope: searchScope,
+      searchValue: searchValue,
+      questionCount: db.collection('questions').count(params),
+      questionDates: db.collection('questions').find(params, {date: 1}),
+      questions: db.collection('questions').find(params, {
+        $page: page,
+        $limit: 20,
+        $orderBy: {date: -1, _id: -1},
+        $join: [{mps: {
+          $where: {$query: {_id: '$$.by.mp_id'}},
+          $as: '__byFull',
+          $require: true,
+          $multi: true
+        }}]
+      })
+    })
+  }, 0))
+}
+
+export const Main = withRouter(React.createClass({
+  componentDidMount() {
+    this.props.router.listen(() => this.setState(
+      // State must be non-empty to trigger UI update
+      {questions: null},
+      () => fetchData(this.props.location.query).then(
+        nextState => this.setState(nextState)
+      )
+    ))
   },
 
   updateHash(values = {}) {
-    this.props.history.push({
+    this.props.router.push({
       query: Object.assign({}, this.props.location.query, values)
-    })
-    // State value must be non-empty to trigger UI update
-    this.setState({questions: null}, this.refreshData)
-  },
-
-  refreshData(
-    {page = 0, searchScope = 'all', searchValue = null} = this.props.location.query
-  ) {
-    new Promise(resolve => setTimeout(() => {
-      const params = !searchValue ? {} : (() => {
-        const regex = new RegExp(searchValue, 'i')
-        if (searchScope === 'all') {
-          return {
-            $or: ['date', 'identifier', 'text']
-              .map(v => ({[v]: regex}))
-              .concat({by: {
-                mp_id: db.collection('mps').find({name: {el: regex}}).map(mp => mp._id)
-              }})
-          }
-        } else if (searchScope === 'by') {
-          return {[searchScope]: {
-            mp_id: db.collection('mps').find({name: {el: regex}}).map(mp => mp._id)
-          }}
-        } else {
-          return {[searchScope]: regex}
-        }
-      })()
-
-      return resolve([
-        db.collection('questions').count(params),
-        db.collection('questions').find(params, {date: 1}),
-        db.collection('questions').find(params, {
-          $page: page,
-          $limit: 20,
-          $orderBy: {date: -1, _id: -1},
-          $join: [{mps: {
-            $where: {$query: {_id: '$$.by.mp_id'}},
-            $as: '__byFull',
-            $require: true,
-            $multi: true
-          }}]
-        })
-      ])
-    }, 0)).then(([questionCount, questionDates, questions]) => {
-      this.setState({
-        docTitle: `${searchValue
-                     ? `Αναζήτηση: ${searchValue} — ` : ''}Ερωτήσεις Κυπρίων Βουλευτών`,
-        page: parseInt(page),
-        pages: Math.ceil(questionCount / 20),
-        questionCount: questionCount,
-        questionDates: questionDates,
-        questions: questions
-      })
     })
   },
 
   render() {
-    return (
-      <DocumentTitle title={this.state.docTitle}>
-        <div className="__main">
-          <ListControls
-            questionCount={this.state.questionCount}
-            initialPage={this.state.initialPage}
-            page={this.state.page}
-            pages={this.state.pages}
-            updateHash={this.updateHash}/>
-          <TimeSeries questionDates={this.state.questionDates}/>
-          <ListForm
-            initialSearchScope={this.props.location.query.searchScope}
-            initialSearchValue={this.props.location.query.searchValue}
-            questions={this.state.questions}
-            updateHash={this.updateHash}/>
-          {this.state.questions
-           ? <List questions={this.state.questions}/> : <Load/>}
-        </div>
-      </DocumentTitle>
+    if (!this.state || !this.state.questions)
+      return <Load/>
+    else
+      return (
+        <DocumentTitle title={
+          (this.state.searchValue ? `Αναζήτηση: ${this.state.searchValue} — ` : '') +
+          'Ερωτήσεις Κυπρίων Βουλευτών'
+        }>
+          <div className="__main">
+            <ListControls
+              questionCount={this.state.questionCount}
+              page={this.state.page}/>
+            <TimeSeries questionDates={this.state.questionDates}/>
+            <ListForm
+              initialSearchScope={this.state.searchScope}
+              initialSearchValue={this.state.searchValue}
+              questions={this.state.questions}
+              updateHash={this.updateHash}/>
+            <List questions={this.state.questions}/>
+          </div>
+        </DocumentTitle>
     )
   }
-})
+}))
