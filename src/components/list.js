@@ -39,7 +39,8 @@ export function ListControls(props) {
       </p>
       <ListPager
         page={props.page}
-        questionCount={props.questionCount}/>
+        questionCount={props.questionCount}
+        updateHash={props.updateHash}/>
     </div>
   )
 }
@@ -53,7 +54,9 @@ function ListPager(props) {
                                           : ""}`}
             key={page}>
           {typeof page === 'string' ? '…' :
-            <Link to={{query: {page: page}}}>{page + 1}</Link>}
+            <Link onClick={() => props.updateHash({page: page})}>
+              {page + 1}
+            </Link>}
         </li>
       ))}
     </ul>

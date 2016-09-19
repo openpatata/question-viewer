@@ -98,7 +98,8 @@ export const Main = withRouter(React.createClass({
           <div className="__main">
             <ListControls
               questionCount={this.state.questionCount}
-              page={this.state.page}/>
+              page={this.state.page}
+              updateHash={this.updateHash}/>
             <TimeSeries questionDates={this.state.questionDates}/>
             <ListForm
               initialSearchScope={this.state.searchScope}
