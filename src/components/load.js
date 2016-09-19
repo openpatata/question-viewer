@@ -4,7 +4,10 @@ import React from 'react'
 
 
 const pepTalk = [
-  'Βάσταξε', 'Πόμινε', 'Υπομονήν τζαι κράτην'
+  'Βάσταξε',
+  'Πόμινε',
+  'Υπομονήν τζαι κράτην',
+  'Η υπομονή εν αρετή'
 ]
 
 export class Load extends React.Component {

@@ -1,10 +1,9 @@
 
 .question-form {
-  width: 650px;
-  margin: auto;
-  padding: calc(2em - 2px);
-  padding-bottom: 0;
+  @extend %content-container;
   margin-bottom: -2px;
+  padding-left:  calc(2em - 2px);
+  padding-right: calc(2em - 2px);
 
   &__search-array {
     display: flex;

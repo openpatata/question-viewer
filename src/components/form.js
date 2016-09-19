@@ -2,8 +2,6 @@
 import ld from 'lodash'
 import React from 'react'
 
-import {TimeSeries} from './timeSeries'
-
 
 export const ListForm = React.createClass({
   debounce: ld.debounce((that, v) => that.props.updateHash({page: 0, searchValue: v}), 500),
@@ -11,8 +9,6 @@ export const ListForm = React.createClass({
   render() {
     return (
       <div className="question-form">
-        <TimeSeries questions={this.props.questions}
-                    questionDates={this.props.questionDates}/>
         <div className="question-form__search-array">
           <input
               type="search"

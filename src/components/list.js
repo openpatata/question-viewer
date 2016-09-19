@@ -10,12 +10,10 @@ const pageRange = 3
 export class List extends React.Component {
   render() {
     return (
-      <div>
-        <div className="question-list">
-          {this.props.questions.map(question => (
-            <Question key={question._id} data={question}/>
-          ))}
-        </div>
+      <div className="question-list">
+        {this.props.questions.map(question => (
+          <Question key={question._id} data={question}/>
+        ))}
       </div>
     )
   }
@@ -27,8 +25,8 @@ export class ListControls extends React.Component {
       <div className="list-controls">
         <p className="list-controls__result-count">
           {this.props.questionCount}{`${this.props.questionCount == 1
-                                      ? " αποτέλεσμα"
-                                      : " αποτελέσματα"}`}
+                                        ? " αποτέλεσμα"
+                                        : " αποτελέσματα"}`}
         </p>
         <ListPager
           initialPage={this.props.initialPage}

@@ -1,13 +1,15 @@
 
 import marked from 'marked'
 import React from 'react'
+import {Link} from 'react-router'
 
 
-const abbreviateFirstName = name => {
+function abbreviateFirstName(name) {
   const nameParts = name.split(' ')
-  return nameParts.slice(0, (nameParts.length - 1))
-                  .concat([`${nameParts[nameParts.length - 1][0]}.`])
-                  .join(' ')
+  return nameParts
+    .slice(0, (nameParts.length - 1))
+    .concat([`${nameParts[nameParts.length - 1][0]}.`])
+    .join(' ')
 }
 
 class QuestionHeader extends React.Component {
@@ -19,10 +21,16 @@ class QuestionHeader extends React.Component {
             <ul>
               {this.props.data.__byFull.map(author => (
                 <li key={author._id}>
-                  <div className="author__image">
-                    {author.image ? <img src={author.image.replace('imageoriginal', 'imagesmall')} /> : ''}
+                  <Link to={`/person/${author._id}`}>
+                    <div className="author__image">
+                      {author.image
+                       ? <img src={author.image.replace('imageoriginal', 'imagesmall')} />
+                       : ''}
+                    </div>
+                  </Link>
+                  <div className="author__name">
+                    {abbreviateFirstName(author.name.el)}
                   </div>
-                  <div className="author__name">{abbreviateFirstName(author.name.el)}</div>
                 </li>
                ))}
             </ul>
@@ -60,8 +68,7 @@ export class Question extends React.Component {
         <QuestionHeader data={this.props.data}/>
         <div
           className="question-text"
-          dangerouslySetInnerHTML={{__html: marked(this.props.data.text.toString())}}
-          />
+          dangerouslySetInnerHTML={{__html: marked(this.props.data.text.toString())}}/>
       </article>
     )
   }

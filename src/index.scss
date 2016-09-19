@@ -1,7 +1,15 @@
 
+$content-width: 650px;
+
+
 %bulletless-list {
   list-style: none;
   padding-left: 0;
+}
+
+%content-container {
+  width: 650px;
+  margin: auto;
 }
 
 @mixin inline-list($spacing: 1em) {
@@ -42,7 +50,7 @@ body {
 
 .site-header {
   margin: 3em auto;
-  width: 650px;
+  width: $content-width;
 
   .page-title,
   .tag-line,
@@ -81,5 +89,6 @@ body {
 @import "components/list";
 @import "components/load";
 @import "components/main";
+@import "components/person";
 @import "components/question";
 @import "components/timeSeries";

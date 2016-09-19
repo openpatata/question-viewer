@@ -1,0 +1,22 @@
+
+.__person {
+  @extend %content-container;
+  padding-left:  2em;
+  padding-right: 2em;
+
+  h2 {
+    line-height: 2.5rem;
+  }
+}
+
+
+.back-button {
+  float: right;
+  line-height: 2.5rem;
+  padding: 0 .5em;
+  background: none;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}

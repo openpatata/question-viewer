@@ -3,15 +3,12 @@ import React from 'react'
 import DocumentTitle from 'react-document-title'
 import 'whatwg-fetch'
 
+import {db} from '../index'
 import {ListForm} from './form'
 import {List, ListControls} from './list'
 import {Load} from './load'
-import {db} from '../index'
+import {TimeSeries} from './timeSeries'
 
-
-const insertAsync = (col, data) => new Promise(resolve => {
-  db.collection(col).insert(data, resolve)
-})
 
 /**
  * Here's how this app works:
@@ -28,30 +25,23 @@ const insertAsync = (col, data) => new Promise(resolve => {
  */
 export const Main = React.createClass({
   componentWillMount() {
-    this.props.history.listen(location => {
-      this.query = location.query
-    })
-  },
-
-  componentDidMount() {
-    Promise.all(
-      [fetch(this.props.mpsUrl), fetch(this.props.questionsUrl)]
-    ).then(([mps, questions]) =>
-      Promise.all([mps.json(), questions.json()])
-    ).then(([mps, questions]) =>
-      Promise.all([insertAsync('mps', mps), insertAsync('questions', questions)])
-    ).then(() => this.updateHash())
+    this.updateHash()
   },
 
   updateHash(values = {}) {
-    this.props.history.push({query: Object.assign({}, this.query, values)})
+    this.props.history.push({
+      query: Object.assign({}, this.props.location.query, values)
+    })
+    // State value must be non-empty to trigger UI update
     this.setState({questions: null}, this.refreshData)
   },
 
-  refreshData({page = 0, searchScope = 'all', searchValue = null} = this.query) {
-    (new Promise(resolve => setTimeout(() => {
-      let params = !searchValue ? {} : (() => {
-        let regex = new RegExp(searchValue, 'i')
+  refreshData(
+    {page = 0, searchScope = 'all', searchValue = null} = this.props.location.query
+  ) {
+    new Promise(resolve => setTimeout(() => {
+      const params = !searchValue ? {} : (() => {
+        const regex = new RegExp(searchValue, 'i')
         if (searchScope === 'all') {
           return {
             $or: ['date', 'identifier', 'text']
@@ -84,9 +74,10 @@ export const Main = React.createClass({
           }}]
         })
       ])
-    }, 0))).then(([questionCount, questionDates, questions]) => {
+    }, 0)).then(([questionCount, questionDates, questions]) => {
       this.setState({
-        docTitle: `Ερωτήσεις Κυπρίων Βουλευτών${searchValue ? `: ${searchValue}` : ''}`,
+        docTitle: `${searchValue
+                     ? `Αναζήτηση: ${searchValue} — ` : ''}Ερωτήσεις Κυπρίων Βουλευτών`,
         page: parseInt(page),
         pages: Math.ceil(questionCount / 20),
         questionCount: questionCount,
@@ -97,24 +88,23 @@ export const Main = React.createClass({
   },
 
   render() {
-    if (!this.state)
-      return <Load />
     return (
       <DocumentTitle title={this.state.docTitle}>
-        <div>
+        <div className="__main">
           <ListControls
             questionCount={this.state.questionCount}
             initialPage={this.state.initialPage}
             page={this.state.page}
             pages={this.state.pages}
-            updateHash={this.updateHash} />
+            updateHash={this.updateHash}/>
+          <TimeSeries questionDates={this.state.questionDates}/>
           <ListForm
-            initialSearchScope={this.query.searchScope}
-            initialSearchValue={this.query.searchValue}
+            initialSearchScope={this.props.location.query.searchScope}
+            initialSearchValue={this.props.location.query.searchValue}
             questions={this.state.questions}
-            questionDates={this.state.questionDates}
-            updateHash={this.updateHash} />
-          {this.state.questions ? <List questions={this.state.questions} /> : <Load />}
+            updateHash={this.updateHash}/>
+          {this.state.questions
+           ? <List questions={this.state.questions}/> : <Load/>}
         </div>
       </DocumentTitle>
     )

@@ -1,9 +1,8 @@
 
 .list-controls,
 .question-list {
+  @extend %content-container;
   position: relative;
-  width: 650px;
-  margin: auto;
   padding: 0 2em;
   z-index: 5;
 }

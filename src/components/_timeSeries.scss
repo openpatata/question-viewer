@@ -1,4 +1,11 @@
 
+.time-series {
+  @extend %content-container;
+  padding: 2em;
+  padding-bottom: 0;
+}
+
+
 .bar {
 
 
