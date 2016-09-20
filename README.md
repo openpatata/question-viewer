@@ -8,10 +8,7 @@ written question data.
 2. Grab the latest questions dump from GitHub:
 
    ```sh
-   mkdir build
-   cd build
-   curl -O https://cdn.rawgit.com/openpatata/openpatata-data/master/_dumps/json/questions.json
-   cd -
+   git clone --branch export --depth 1 https://github.com/openpatata/openpatata-data.git build
    ```
 
 3. Install all of our dependencies:
