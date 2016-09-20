@@ -60,7 +60,7 @@ function fetchData({page = 0, searchScope = 'all', searchValue = null}) {
         $orderBy: {date: -1, _id: -1},
         $join: [{mps: {
           _id: 'by.mp_id',
-          $as: '__byFull',
+          $as: '__by',
           $require: true,
           $multi: true
         }}]

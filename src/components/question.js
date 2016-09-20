@@ -18,9 +18,9 @@ function QuestionHeader(props) {
       <ul className="question-metadata">
         <li aria-label="Ερωτώντες" className="question-metadata__authors">
           <ul>
-            {props.data.__byFull.map(author => (
+            {props.data.__by.map(author => (
               <li key={author._id}>
-                <Link to={`/person/${author._id}`}>
+                <Link to={`/person/${author._id}`} title="Στοιχεία βουλευτή">
                   <div className="author__image">
                     {author.image
                      ? <img src={author.image.replace('imageoriginal', 'imagesmall')} />

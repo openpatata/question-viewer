@@ -31,9 +31,18 @@
         </ul>
       </nav>
     </header>
-    <main data-mps-url="<%=
+    <main data-electoral-districs-url="<%=
+        webpack.assets[_.findIndex(webpack.assets,
+                                   o => _.startsWith(o.name, 'electoral_districts.'))].name
+      %>" data-mps-url="<%=
         webpack.assets[_.findIndex(webpack.assets,
                                    o => _.startsWith(o.name, 'mps.'))].name
+      %>" data-parliamentary-periods-url="<%=
+        webpack.assets[_.findIndex(webpack.assets,
+                                   o => _.startsWith(o.name, 'parliamentary_periods.'))].name
+      %>" data-parties-url="<%=
+        webpack.assets[_.findIndex(webpack.assets,
+                                   o => _.startsWith(o.name, 'parties.'))].name
       %>" data-questions-url="<%=
         webpack.assets[_.findIndex(webpack.assets,
                                    o => _.startsWith(o.name, 'questions.'))].name
