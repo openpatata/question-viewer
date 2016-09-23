@@ -1,12 +1,12 @@
 
-import _ from 'lodash';
+import ld from 'lodash'
 
-import webpack from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+import webpack from 'webpack'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 
-import autoprefixer from 'autoprefixer';
-import assets from 'postcss-assets';
-import svgo from 'postcss-svgo';
+import autoprefixer from 'autoprefixer'
+import assets from 'postcss-assets'
+import svgo from 'postcss-svgo'
 
 
 let config = {
@@ -21,19 +21,19 @@ let config = {
     {test: /\.scss$/, loader: 'style!css!postcss!sass'}
   ]},
   postcss: [assets(), autoprefixer(), svgo()]
-};
+}
 
 if (process.env.NODE_ENV === 'production') {
-  config = _.mergeWith(config, {
+  config = ld.mergeWith(config, {
     plugins: [
       new webpack.DefinePlugin({'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`}),
       new webpack.optimize.UglifyJsPlugin()
     ]
-  }, (objValue, srcValue) => _.isArray(objValue) && objValue.concat(srcValue));
+  }, (objValue, srcValue) => ld.isArray(objValue) && objValue.concat(srcValue))
 } else {
-  config = _.merge(config, {
+  config = ld.merge(config, {
     devtool: 'eval-source-map', devServer: {contentBase: './build'}
-  });
+  })
 }
 
-export {config as default};
+export {config as default}

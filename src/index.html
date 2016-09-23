@@ -2,9 +2,8 @@
 <html lang="el">
   <head>
     <meta charset="utf-8"/>
-    <meta
-      name="description"
-      content="Ερωτήσεις Κυπρίων βουλευτών προς κυβερνητικά όργανα."/>
+    <meta name="description"
+          content="Ερωτήσεις Κυπρίων βουλευτών προς κυβερνητικά όργανα."/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Ερωτήσεις Κυπρίων Βουλευτών</title>
   </head>
@@ -21,9 +20,10 @@
       </div>
       <nav class="nav-bar">
         <ul>
+          <li class="nav-bar__item"><a href="#/">αρχική</a></li>
+          <li class="nav-bar__item"><a href="#/about">σχετικά</a></li>
           <li class="nav-bar__item">
-            <a href="https://github.com/openpatata/question-viewer"
-               rel="external">πηγαίος κώδικας</a>
+            <a href="mailto:support@neavouli.eu" rel="external">επικοινωνία</a>
           </li>
           <li class="nav-bar__item">
             <a href="http://neavouli.eu" rel="external">neavouli</a>
@@ -31,22 +31,10 @@
         </ul>
       </nav>
     </header>
-    <main data-electoral-districs-url="<%=
+    <main <% ['electoral_districts', 'mps', 'parliamentary_periods',
+              'parties', 'questions'].forEach(v => { %>data-<%= v.replace('_', '-') %>-url="<%=
         webpack.assets[_.findIndex(webpack.assets,
-                                   o => _.startsWith(o.name, 'electoral_districts.'))].name
-      %>" data-mps-url="<%=
-        webpack.assets[_.findIndex(webpack.assets,
-                                   o => _.startsWith(o.name, 'mps.'))].name
-      %>" data-parliamentary-periods-url="<%=
-        webpack.assets[_.findIndex(webpack.assets,
-                                   o => _.startsWith(o.name, 'parliamentary_periods.'))].name
-      %>" data-parties-url="<%=
-        webpack.assets[_.findIndex(webpack.assets,
-                                   o => _.startsWith(o.name, 'parties.'))].name
-      %>" data-questions-url="<%=
-        webpack.assets[_.findIndex(webpack.assets,
-                                   o => _.startsWith(o.name, 'questions.'))].name
-      %>">
+                                   o => _.startsWith(o.name, `${v}.`))].name %>"<% }) %>>
     </main>
   </body>
 </html>

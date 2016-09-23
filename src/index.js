@@ -12,6 +12,7 @@ import React from 'react'
 import {render} from 'react-dom'
 import {Router, Route, IndexRoute, hashHistory} from 'react-router'
 
+import {About} from './components/about'
 import {Load} from './components/load'
 import {Main} from './components/main'
 import {Person} from './components/person'
@@ -44,6 +45,7 @@ Promise.all(ld.values(elMain.dataset).map(d => fetch(d)))
   <Router history={hashHistory}>
     <Route path="/">
       <IndexRoute component={Main}/>
+      <Route path="about" component={About}/>
       <Route path="person/:personId" component={Person}/>
     </Route>
   </Router>,
