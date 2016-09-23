@@ -4,14 +4,6 @@ import React from 'react'
 import {Link} from 'react-router'
 
 
-function abbreviateFirstName(name) {
-  const nameParts = name.split(' ')
-  return nameParts
-    .slice(0, (nameParts.length - 1))
-    .concat([`${nameParts[nameParts.length - 1][0]}.`])
-    .join(' ')
-}
-
 function QuestionHeader(props) {
   return (
     <aside className="question-header">
@@ -28,35 +20,26 @@ function QuestionHeader(props) {
                   </div>
                 </Link>
                 <div className="author__name">
-                  <Link to={{query: {searchScope: 'by',
+                  <Link to={{query: {searchField: 'by',
                                      searchValue: author.name.el}}}>
-                    {abbreviateFirstName(author.name.el)}
+                    {author.name.el}
                   </Link>
                 </div>
               </li>
              ))}
           </ul>
         </li>
-        <li aria-label="Απαντήσεις" className="question-metadata__answers">
-          <ul>
-            {props.data.answers.map((answer, index) => (
-              <li key={props.data._id + answer}>
-                <a href={answer} rel="external">Α</a>
-              </li>
-            ))}
-          </ul>
-        </li>
         <li aria-label="Ημερομηνία" className="question-metadata__date">
           <time dateTime={props.data.date}>
-            <Link to={{query: {searchScope: 'date',
+            <Link to={{query: {searchField: 'date',
                                searchValue: props.data.date}}}>
-              {props.data.date.split('-').reverse().join('/')}
+              {props.data.date}
             </Link>
           </time>
         </li>
       </ul>
       <div aria-label="Αριθμός" className="question-id">
-        <Link to={{query: {searchScope: 'identifier',
+        <Link to={{query: {searchField: 'identifier',
                            searchValue: props.data.identifier}}}>
           {props.data.identifier}
         </Link>
@@ -72,6 +55,15 @@ export function Question(props) {
                                          ? "unanswered" : "answered"}`}>
       <h2>{props.data.heading}</h2>
       <QuestionHeader data={props.data}/>
+      {!props.data.answers.length ? '' : <div className="question-answers">
+        <ul>
+          {props.data.answers.map((answer, index) => (
+            <li key={props.data._id + answer}>
+              <a href={answer} rel="external">Απάντηση</a>
+            </li>
+          ))}
+        </ul>
+      </div>}
       <div
         className="question-text"
         dangerouslySetInnerHTML={{__html: marked(props.data.text.toString())}}/>

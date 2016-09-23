@@ -1,5 +1,4 @@
 
-import ld from 'lodash'
 import React from 'react'
 import {withRouter} from 'react-router'
 import DocumentTitle from 'react-document-title'
@@ -11,6 +10,10 @@ import {List, ListControls} from './list'
 import {Load} from './load'
 import {TimeSeries} from './timeSeries'
 
+
+function parseBool(value) {
+  return value === true || value === 'true'
+}
 
 /**
  * Here's how this app works:
@@ -26,32 +29,63 @@ import {TimeSeries} from './timeSeries'
  * And that's pretty much all there is to it.
  */
 
-function fetchData({page = 0, searchScope = 'all', searchValue = null}) {
-  return new Promise(resolve => setTimeout(() => {
-    const params = !searchValue ? {} : (() => {
-      const regex = new RegExp(searchValue, 'i')
+function fetchData(prevState, {
+  page = 0, searchField = 'all', searchValue = null,
+  showAnswered = true, showUnanswered = true
+}) {
+  return new Promise((resolve, reject) => setTimeout(() => {
+    let params
 
-      if (searchScope === 'all') {
-        return {
-          $or: ['date', 'identifier', 'text']
-            .map(v => ({[v]: regex}))
-            .concat({by: {
-              mp_id: db.collection('mps').find({name: {el: regex}}).map(mp => mp._id)
-            }})
-        }
-      } else if (searchScope === 'by') {
-        return {[searchScope]: {
-          mp_id: db.collection('mps').find({name: {el: regex}}).map(mp => mp._id)
-        }}
+    showAnswered = parseBool(showAnswered)
+    showUnanswered = parseBool(showUnanswered)
+    if (!showAnswered && !showUnanswered) {
+      // Flip state if attempting to toggle both off
+      if (prevState.showAnswered === true) {
+        showUnanswered = true
+      } else if (prevState.showUnanswered === true) {
+        showAnswered = true
       } else {
-        return {[searchScope]: regex}
+        // This should only arise from editing the query string manually
+        // _and_ if having purged the location history (programmatically or
+        // e.g. by pasting the URL in a new tab)
+        showAnswered = true
+        showUnanswered = true
       }
-    })()
+      return reject({showAnswered: showAnswered, showUnanswered: showUnanswered})
+    } else if (!showAnswered) {
+      params = {$count: {answers: 0}}
+    } else if (!showUnanswered) {
+      params = {$count: {answers: {$gt: 0}}}
+    }
+
+    if (searchValue) {
+      params = Object.assign({}, params, (() => {
+        const regex = new RegExp(searchValue, 'i')
+
+        if (searchField === 'all') {
+          return {
+            $or: ['date', 'identifier', 'text']
+              .map(v => ({[v]: regex}))
+              .concat({by: {
+                mp_id: db.collection('mps').find({name: {el: regex}}).map(mp => mp._id)
+              }})
+          }
+        } else if (searchField === 'by') {
+          return {[searchField]: {
+            mp_id: db.collection('mps').find({name: {el: regex}}).map(mp => mp._id)
+          }}
+        } else {
+          return {[searchField]: regex}
+        }
+      })())
+    }
 
     return resolve({
       page: parseInt(page),
-      searchScope: searchScope,
+      searchField: searchField,
       searchValue: searchValue,
+      showAnswered: showAnswered,
+      showUnanswered: showUnanswered,
       questionCount: db.collection('questions').count(params),
       questionDates: db.collection('questions').find(params, {date: 1}),
       questions: db.collection('questions').find(params, {
@@ -70,13 +104,13 @@ function fetchData({page = 0, searchScope = 'all', searchValue = null}) {
 }
 
 export const Main = withRouter(React.createClass({
-  componentDidMount() {
+  componentWillMount() {
     this.props.router.listen(() => this.setState(
       // State must be non-empty to trigger UI update
       {questions: null},
-      () => fetchData(this.props.location.query).then(
-        nextState => this.setState(nextState)
-      )
+      () => fetchData(this.state, this.props.location.query)
+        .then(nextState => this.setState(nextState))
+        .catch(queryCorrection => this.updateHash(queryCorrection))
     ))
   },
 
@@ -87,7 +121,7 @@ export const Main = withRouter(React.createClass({
   },
 
   render() {
-    if (!this.state || !this.state.questions)
+    if (!(this.state || {}).questions)
       return <Load/>
     else
       return (
@@ -102,8 +136,10 @@ export const Main = withRouter(React.createClass({
               updateHash={this.updateHash}/>
             <TimeSeries questionDates={this.state.questionDates}/>
             <ListForm
-              initialSearchScope={this.state.searchScope}
-              initialSearchValue={this.state.searchValue}
+              defaultSearchField={this.state.searchField}
+              defaultSearchValue={this.state.searchValue}
+              defaultShowAnswered={this.state.showAnswered}
+              defaultShowUnanswered={this.state.showUnanswered}
               questions={this.state.questions}
               updateHash={this.updateHash}/>
             <List questions={this.state.questions}/>
