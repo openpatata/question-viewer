@@ -22,17 +22,17 @@ export const Person = React.createClass({
         $join: [{electoral_districts: {
           _id: 'tenures.electoral_district_id',
           $as: '__electoral_districts',
-          $require: true,
+          $require: false,
           $multi: true
         }}, {parliamentary_periods: {
           _id: 'tenures.parliamentary_period_id',
           $as: '__parliamentary_periods',
-          $require: true,
+          $require: false,
           $multi: true
         }}, {parties: {
           _id: 'tenures.party_id',
           $as: '__parties',
-          $require: true,
+          $require: false,
           $multi: true
         }}]
       })
@@ -57,8 +57,9 @@ export const Person = React.createClass({
             <dt>Τηλέφωνο</dt>
             <dd>{(this.state.data
                   .contact_details
-                  .filter(c => c.type == 'voice' && c.note == 'parliament')[0] || {})
-                 .value}</dd>
+                  .filter(c => (c.type == 'voice' && c.note == 'parliament' &&
+                                c.parliamentary_period_id == '11'))[0] || {}
+                 ).value}</dd>
             <dt>Twitter</dt>
             <dd><a href={selectLink(this.state.data.links, 'twitter.com')}
                    ref="external">
@@ -101,7 +102,7 @@ export const Person = React.createClass({
           <h3>Πηγές</h3>
           <ul>
             {this.state.data._sources.map(s =>
-              <li><a href={s} ref="external">{s}</a></li>
+              <li key={s}><a href={s} ref="external">{s}</a></li>
             )}
           </ul>
           <div className="raw-data">
