@@ -48,25 +48,32 @@ function QuestionHeader(props) {
   )
 }
 
+function QuestionFooter(props) {
+  return (
+    <aside className="question-footer">
+      <ul className="question-footer__answers">
+        {props.data.answers.map(answer => <li key={props.data._id + answer}>
+          <a href={answer} rel="external">Απάντηση</a>
+        </li>)}
+      </ul>
+      <ul className="question-footer__misc">
+        <li><a href={props.data._sources[0]} rel="external">Πηγή</a></li>
+        <li><a href={`https://cdn.rawgit.com/openpatata/openpatata-data/master/questions/${props.data._id}.yaml`}
+               rel="external">Μηχανική παράσταση</a></li>
+      </ul>
+    </aside>
+  )
+}
+
 export function Question(props) {
   return (
-    <article
-        className={`question question--${props.data.answers.length === 0
-                                         ? "unanswered" : "answered"}`}>
+    <article className={`question question--${props.data.answers.length === 0
+                                              ? "unanswered" : "answered"}`}>
       <h2>{props.data.heading}</h2>
       <QuestionHeader data={props.data}/>
-      {!props.data.answers.length ? '' : <div className="question-answers">
-        <ul>
-          {props.data.answers.map((answer, index) => (
-            <li key={props.data._id + answer}>
-              <a href={answer} rel="external">Απάντηση</a>
-            </li>
-          ))}
-        </ul>
-      </div>}
-      <div
-        className="question-text"
-        dangerouslySetInnerHTML={{__html: marked(props.data.text.toString())}}/>
+      <div className="question-text"
+           dangerouslySetInnerHTML={{__html: marked(props.data.text.toString())}}/>
+      <QuestionFooter data={props.data}/>
     </article>
   )
 }

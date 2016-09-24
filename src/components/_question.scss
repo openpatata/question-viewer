@@ -10,18 +10,10 @@
   &--answered {
     background-color: #e9fcea;
 
-    .question-text {
+    .question-text,
+    .question-footer,
+    .question-footer__answers li {
       border-color: #e9fcea;
-    }
-
-    .question-answers,
-    .question-answers ul,
-    .question-answers li {
-      border-color: darken(#e9fcea, 3%);
-    }
-
-    .question-answers ul {
-      background-color: #e9fcea;
     }
 
     .question-id,
@@ -31,7 +23,8 @@
 
     .question-id a,
     .author__image,
-    .author__name a {
+    .author__name a,
+    .question-footer__misc li::after {
       color: darken(#e9fcea, 50%);
     }
   }
@@ -39,7 +32,8 @@
   &--unanswered {
     background-color: #fce9f0;
 
-    .question-text {
+    .question-text,
+    .question-footer {
       border-color: #fce9f0;
     }
 
@@ -50,12 +44,13 @@
 
     .question-id a,
     .author__image,
-    .author__name a {
+    .author__name a,
+    .question-footer__misc li::after {
       color: darken(#fce9f0, 50%);
     }
   }
 
-  &:not(:last-child) .question-text {
+  &:not(:last-child) .question-footer {
     border-bottom: 0;
   }
 
@@ -83,7 +78,11 @@
   flex-basis: 65%;
   margin: 0;
 
-  > * {
+  a:hover {
+    text-decoration: underline;
+  }
+
+  > li {
     font-size: .9em;
   }
 
@@ -117,40 +116,59 @@
 }
 
 .question-text {
-  border: 1px solid;
-  border-top: 0;
+  border-left: 1px solid;
+  border-right: 1px solid;
   padding: 1em 1.5em;
   background-color: #fff;
 }
 
-.question-answers {
-  padding: 0 1.5em;
-  border-left:  1px solid;
-  border-right: 1px solid;
-  line-height: 1;
+.question-footer {
+  overflow: auto;
+  padding: 0 1.5em 1em;
+  border: 1px solid;
+  border-top: 0;
   background-color: #fff;
-  text-align: center;
+  line-height: 1em;
 
-  ul {
-    @include inline-list(.5em);
-    display: inline-block;
+  &__answers,
+  &__misc {
     margin: 0;
-    padding: 0 .5em;
-    border-top: 2px solid;
-    border-bottom-left-radius:  3px;
-    border-bottom-right-radius: 3px;
+    text-transform: lowercase;
+  }
+
+  &__answers {
+    @include inline-list(.5em);
+    float: left;
 
     li {
-      padding: 1em .5em;
+
 
       + li {
+        margin-left:  .5em;
+        padding-left: .5em;
         border-left: 1px solid;
-        padding-left: 1em;
+      }
+    }
+  }
+
+  &__misc {
+    @include inline-list(0);
+
+    li {
+      float: right;
+      font-size: .9em;
+
+      + li {
+
+
+        &::after {
+          padding: 0 .5em;
+          content: "◦";
+        }
       }
     }
   }
 }
-
 
 .author {
 
