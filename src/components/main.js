@@ -60,22 +60,29 @@ function fetchData(prevState, {
 
     if (searchValue) {
       params = Object.assign({}, params, (() => {
-        const regex = new RegExp(searchValue, 'i')
+        let searchString
+        try {
+          searchString = new RegExp(searchValue, 'i')
+        } catch (e) {
+          searchString = searchValue
+        }
 
         if (searchField === 'all') {
           return {
             $or: ['date', 'identifier', 'text']
-              .map(v => ({[v]: regex}))
+              .map(v => ({[v]: searchString}))
               .concat({by: {
-                mp_id: db.collection('mps').find({name: {el: regex}}).map(mp => mp._id)
+                mp_id: db.collection('mps')
+                  .find({name: {el: searchString}}).map(mp => mp._id)
               }})
           }
         } else if (searchField === 'by') {
           return {[searchField]: {
-            mp_id: db.collection('mps').find({name: {el: regex}}).map(mp => mp._id)
+            mp_id: db.collection('mps')
+              .find({name: {el: searchString}}).map(mp => mp._id)
           }}
         } else {
-          return {[searchField]: regex}
+          return {[searchField]: searchString}
         }
       })())
     }
