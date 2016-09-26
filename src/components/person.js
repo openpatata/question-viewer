@@ -1,15 +1,11 @@
 
+import ld from 'lodash'
 import React from 'react'
 import DocumentTitle from 'react-document-title'
 
 import {db} from '../index'
 import {Load} from './load'
 
-
-function formatDates(pperiods, pperiod_id) {
-  const pperiod = pperiods.filter(i => i._id == pperiod_id)[0]
-  return [pperiod.start_date, pperiod.end_date].join('–')
-}
 
 function selectLink(links, url) {
   return (links.filter(l => l.url.indexOf(url) >= 0)[0] || {}).url
@@ -89,10 +85,13 @@ export const Person = React.createClass({
                 <tr key={i}>
                   <td>{this.state.data.__parliamentary_periods
                        .filter(i => i._id == t.parliamentary_period_id)[0].number.el}</td>
-                  <td>{formatDates(this.state.data.__parliamentary_periods,
-                                   t.parliamentary_period_id)}</td>
-                  <td>{this.state.data.__parties
-                       .filter(i => i._id == t.party_id)[0].abbreviation.el}</td>
+                  <td>{ld.zipWith([t.start_date, t.end_date],
+                                  ld.at(this.state.data.__parliamentary_periods
+                                        .filter(i => i._id == t.parliamentary_period_id)[0],
+                                        ['start_date', 'end_date']),
+                                  (a, b) => a || b).join('–')}</td>
+                  <td>{ld.propertyOf(this.state.data.__parties
+                                     .filter(i => i._id == t.party_id)[0])('abbreviation.el') || '—'}</td>
                   <td>{this.state.data.__electoral_districts
                        .filter(i => i._id == t.electoral_district_id)[0].name.el}</td>
                 </tr>
