@@ -33,6 +33,12 @@
   }
 }
 
-.raw-data {
-  margin-top: 5em;
+.data-link {
+  margin-top: 2em;
+  text-align: right;
+  text-transform: lowercase;
+
+  a {
+    font-size: .9em;
+  }
 }

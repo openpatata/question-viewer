@@ -104,10 +104,9 @@ export const Person = React.createClass({
               <li key={s}><a href={s} ref="external">{s}</a></li>
             )}
           </ul>
-          <div className="raw-data">
-            <h3>Μηχανική παράσταση</h3>
-            <pre>{JSON.stringify(this.state.data, null, '  ')}</pre>
-          </div>
+          <div className="data-link">
+            <a href={`https://cdn.rawgit.com/openpatata/openpatata-data/master/mps/${this.state.data._id}.yaml`}
+               rel="external">Μηχανική παράσταση</a></div>
         </div>
       </DocumentTitle>
     )
