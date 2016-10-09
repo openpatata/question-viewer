@@ -4,7 +4,9 @@ import './../build/electoral_districts.json'
 import './../build/mps.json'
 import './../build/parliamentary_periods.json'
 import './../build/parties.json'
+import './../build/question_settlements.json'
 import './../build/questions.json'
+import './../build/settlements.json'
 
 import ForerunnerDB from 'forerunnerdb'
 import ld from 'lodash'
@@ -32,13 +34,17 @@ render(
 
 Promise.all(ld.values(elMain.dataset).map(d => fetch(d)))
 .then(o => Promise.all(o.map(d => d.json())))
-.then(([electoralDistricts, mps, parliamentaryPeriods, parties, questions]) =>
-  Promise.all([
+.then(([
+    electoralDistricts, mps, parliamentaryPeriods, parties, 
+    questionSettlements, questions, settlements
+  ]) => Promise.all([
     insertAsync('electoral_districts', electoralDistricts),
     insertAsync('mps', mps),
     insertAsync('parliamentary_periods', parliamentaryPeriods),
     insertAsync('parties', parties),
-    insertAsync('questions', questions)
+    insertAsync('question_settlements', questionSettlements),
+    insertAsync('questions', questions),
+    insertAsync('settlements', settlements)
   ])
 )
 .then(() => render(

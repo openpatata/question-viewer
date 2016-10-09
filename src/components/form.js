@@ -25,6 +25,7 @@ export function ListForm(props) {
           <option value="date">Ημερομηνία</option>
           <option value="identifier">Αριθμός</option>
           <option value="text">Κείμενο</option>
+          <option value="settlement">Τοποθεσία</option>
         </select>
         <div className="question-form__status-toggles">
           <input id="__answered"

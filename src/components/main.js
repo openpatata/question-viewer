@@ -1,4 +1,5 @@
 
+import ld from 'lodash'
 import React from 'react'
 import {withRouter} from 'react-router'
 import DocumentTitle from 'react-document-title'
@@ -81,6 +82,17 @@ function fetchData(prevState, {
             mp_id: db.collection('mps')
               .find({name: {el: searchString}}).map(mp => mp._id)
           }}
+        } else if (searchField === 'settlement') {
+          return {
+            _id: ld(db.collection('question_settlements').find({
+                _id: db.collection('settlements').find({name: searchString})
+                  .map(s => s._id)
+              }))
+              .map(l => l.question_ids)
+              .flatten()
+              .uniq()
+              .value()
+          }
         } else {
           return {[searchField]: searchString}
         }
