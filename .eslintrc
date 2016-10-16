@@ -1,0 +1,7 @@
+{
+  "extends": ["standard", "standard-jsx"],
+  "root": true,
+  "rules": {
+    "no-multiple-empty-lines": [2, {"max": 2}]
+  }
+}

@@ -10,7 +10,7 @@ const formatNumber = new Intl.NumberFormat('el').format
 
 const pageRange = 3
 
-function genPagination(page, questionCount) {
+function genPagination (page, questionCount) {
   const pages = Math.ceil(questionCount / 20)
   return ld(
     ld.union([0], ld.range(page - pageRange, page + pageRange + 1), [pages - 1])
@@ -23,43 +23,45 @@ function genPagination(page, questionCount) {
     .value()
 }
 
-export function List(props) {
+export function List (props) {
   return (
-    <div className="question-list">
-      {props.questions.map(question => <Question key={question._id} data={question}/>)}
+    <div className='question-list'>
+      {props.questions.map(question =>
+        <Question key={question._id} data={question} />
+      )}
     </div>
   )
 }
 
-export function ListControls(props) {
+export function ListControls (props) {
   return (
-    <div className="list-controls">
-      <p className="list-controls__result-count">
-        {props.questionCount}{`${props.questionCount == 1
-                                      ? " αποτέλεσμα"
-                                      : " αποτελέσματα"}`}
+    <div className='list-controls'>
+      <p className='list-controls__result-count'>
         {formatNumber(props.questionCount)}{`${props.questionCount === 1
+                                               ? ' αποτέλεσμα'
+                                               : ' αποτελέσματα'}`}
       </p>
       <ListPager
         page={props.page}
         questionCount={props.questionCount}
-        updateHash={props.updateHash}/>
+        updateHash={props.updateHash}
+      />
     </div>
   )
 }
 
-function ListPager(props) {
+function ListPager (props) {
   return (
-    <ul className="pagination">
+    <ul className='pagination'>
       {genPagination(props.page, props.questionCount).map(page => (
-        <li className={`pagination__page${props.page == page
-                                          ? " pagination__page--current"
-                                          : ""}`}
+        <li className={`pagination__page${props.page === page
+                                          ? ' pagination__page--current'
+                                          : ''}`}
             key={page}>
-          {typeof page === 'string' ? '…' :
-            <Link onClick={() => props.updateHash({page: page})}>
-              {page + 1}
-            </Link>}
+          {typeof page === 'string' ? '…'
+           : <Link onClick={() => props.updateHash({page: page})}>
+             {page + 1}
+           </Link>}
         </li>
       ))}
     </ul>

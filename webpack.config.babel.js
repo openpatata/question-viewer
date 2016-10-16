@@ -10,7 +10,7 @@ import svgo from 'postcss-svgo'
 
 
 let config = {
-  entry: ['./src/index'],
+  entry: ['whatwg-fetch', './src/index'],
   output: {path: './question-viewer', filename: 'bundle.[hash].js'},
   plugins: [
     new HtmlWebpackPlugin({template: './src/index.html'})

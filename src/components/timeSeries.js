@@ -4,19 +4,26 @@ import React from 'react'
 
 
 const days = ['Κυρ', 'Δευ', 'Τρί', 'Τετ', 'Πέμ', 'Παρ', 'Σάβ']
-const months = ['Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μαΐ', 'Ιουν', 'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοε', 'Δεκ']
+const months = [
+  'Ιαν',
+  'Φεβ',
+  'Μαρ',
+  'Απρ',
+  'Μάι',
+  'Ιουν',
+  'Ιουλ',
+  'Αυγ',
+  'Σεπ',
+  'Οκτ',
+  'Νοε',
+  'Δεκ'
+]
 
-d3.timeFormatDefaultLocale({
-  date: '%d/%m/%y', time: '%H:%M:%S', dateTime: '%A, %e %B',
-  days: days, periods: ['π.μ.', 'μ.μ.'],
-  shortDays: days, months: months, shortMonths: months
-})
-
-const margin = {top: 10, right: 0, bottom: 30, left: 0}
+const margin = {top: 0, right: 0, bottom: 20, left: 0}
 const width = 590 - margin.left - margin.right
 const height = 180 - margin.top - margin.bottom
 
-function selectInterval(dateDiff) {
+function selectInterval (dateDiff) {
   if (dateDiff < (31622400000 * 1.5)) {
     return d3.timeMonth
   } else if (dateDiff < (2592000000 * 1.5)) {
@@ -26,7 +33,7 @@ function selectInterval(dateDiff) {
   }
 }
 
-function drawChart(chart, questionDates) {
+function drawChart (chart, questionDates) {
   if (!questionDates) return
 
   const data = questionDates.map(i => new Date(i.date))
@@ -72,16 +79,26 @@ function drawChart(chart, questionDates) {
 }
 
 export const TimeSeries = React.createClass({
-  componentDidMount() {
+  componentDidMount () {
+    d3.timeFormatDefaultLocale({
+      date: '%d/%m/%y',
+      time: '%H:%M:%S',
+      dateTime: '%A, %e %B',
+      days: days,
+      periods: ['π.μ.', 'μ.μ.'],
+      shortDays: days,
+      months: months,
+      shortMonths: months
+    })
     drawChart(this.refs.chart, this.props.questionDates)
   },
 
-  shouldComponentUpdate(props) {
+  shouldComponentUpdate (props) {
     drawChart(this.refs.chart, props.questionDates)
     return false
   },
 
-  render() {
-    return <div className="time-series" ref="chart"/>
+  render () {
+    return <div className='time-series' ref='chart' />
   }
 })

@@ -6,22 +6,6 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.{es6,js}]
-indent_size = 2
-indent_style = space
-
-[*.html]
-indent_size = 2
-indent_style = space
-
-[*.py]
-indent_size = 4
-indent_style = space
-
-[*.s?css]
-indent_size = 2
-indent_style = space
-
-[*.{yaml,yml}]
+[*.{html,s?css,ya?ml}]
 indent_size = 2
 indent_style = space

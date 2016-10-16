@@ -3,7 +3,6 @@ import ld from 'lodash'
 import React from 'react'
 import {withRouter} from 'react-router'
 import DocumentTitle from 'react-document-title'
-import 'whatwg-fetch'
 
 import {db} from '../index'
 import {ListForm} from './form'
@@ -12,7 +11,7 @@ import {Load} from './load'
 import {TimeSeries} from './timeSeries'
 
 
-function parseBool(value) {
+function parseBool (value) {
   return value === true || value === 'true'
 }
 
@@ -30,7 +29,7 @@ function parseBool(value) {
  * And that's pretty much all there is to it.
  */
 
-function fetchData(prevState, {
+function fetchData (prevState, {
   page = 0, searchField = 'all', searchValue = null,
   showAnswered = true, showUnanswered = true
 }) {
@@ -85,13 +84,13 @@ function fetchData(prevState, {
         } else if (searchField === 'settlement') {
           return {
             _id: ld(db.collection('question_settlements').find({
-                _id: db.collection('settlements').find({name: searchString})
-                  .map(s => s._id)
-              }))
-              .map(l => l.question_ids)
-              .flatten()
-              .uniq()
-              .value()
+              _id: db.collection('settlements').find({name: searchString})
+                .map(s => s._id)
+            }))
+            .map(l => l.question_ids)
+            .flatten()
+            .uniq()
+            .value()
           }
         } else {
           return {[searchField]: searchString}
@@ -123,7 +122,7 @@ function fetchData(prevState, {
 }
 
 export const Main = withRouter(React.createClass({
-  componentWillMount() {
+  componentWillMount () {
     this.props.router.listen(() => this.setState(
       // State must be non-empty to trigger UI update
       {questions: null},
@@ -133,37 +132,36 @@ export const Main = withRouter(React.createClass({
     ))
   },
 
-  updateHash(values = {}) {
+  updateHash (values = {}) {
     this.props.router.push({
       query: Object.assign({}, this.props.location.query, values)
     })
   },
 
-  render() {
-    if (!(this.state || {}).questions)
-      return <Load/>
-    else
-      return (
-        <DocumentTitle title={
-          (this.state.searchValue ? `Αναζήτηση: ${this.state.searchValue} — ` : '') +
-          'Ερωτήσεις Κυπρίων Βουλευτών'
-        }>
-          <div className="__main">
-            <ListControls
-              questionCount={this.state.questionCount}
-              page={this.state.page}
-              updateHash={this.updateHash}/>
-            <TimeSeries questionDates={this.state.questionDates}/>
-            <ListForm
-              defaultSearchField={this.state.searchField}
-              defaultSearchValue={this.state.searchValue}
-              defaultShowAnswered={this.state.showAnswered}
-              defaultShowUnanswered={this.state.showUnanswered}
-              questions={this.state.questions}
-              updateHash={this.updateHash}/>
-            <List questions={this.state.questions}/>
-          </div>
-        </DocumentTitle>
+  render () {
+    return (!(this.state || {}).questions) ? <Load /> : (
+      <DocumentTitle title={
+        (this.state.searchValue ? `Αναζήτηση: ${this.state.searchValue} — ` : '') +
+        'Ερωτήσεις Κυπρίων Βουλευτών'
+      }>
+        <div className='__main'>
+          <ListControls
+            questionCount={this.state.questionCount}
+            page={this.state.page}
+            updateHash={this.updateHash}
+          />
+          <TimeSeries questionDates={this.state.questionDates} />
+          <ListForm
+            defaultSearchField={this.state.searchField}
+            defaultSearchValue={this.state.searchValue}
+            defaultShowAnswered={this.state.showAnswered}
+            defaultShowUnanswered={this.state.showUnanswered}
+            questions={this.state.questions}
+            updateHash={this.updateHash}
+          />
+          <List questions={this.state.questions} />
+        </div>
+      </DocumentTitle>
     )
   }
 }))

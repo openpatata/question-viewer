@@ -8,6 +8,7 @@ import './../build/question_settlements.json'
 import './../build/questions.json'
 import './../build/settlements.json'
 
+
 import ForerunnerDB from 'forerunnerdb'
 import ld from 'lodash'
 import React from 'react'
@@ -20,7 +21,7 @@ import {Main} from './components/main'
 import {Person} from './components/person'
 
 
-function insertAsync(col, data) {
+function insertAsync (col, data) {
   return new Promise(resolve => db.collection(col).insert(data, resolve))
 }
 
@@ -28,14 +29,14 @@ export const db = window.db = (new ForerunnerDB()).db()
 const elMain = document.querySelector('main')
 
 render(
-  <Load/>,
+  <Load />,
   elMain
 )
 
-Promise.all(ld.values(elMain.dataset).map(d => fetch(d)))
+Promise.all(ld.values(elMain.dataset).map(d => fetch(d)))  // eslint-disable-line no-undef
 .then(o => Promise.all(o.map(d => d.json())))
 .then(([
-    electoralDistricts, mps, parliamentaryPeriods, parties, 
+    electoralDistricts, mps, parliamentaryPeriods, parties,
     questionSettlements, questions, settlements
   ]) => Promise.all([
     insertAsync('electoral_districts', electoralDistricts),
@@ -49,10 +50,10 @@ Promise.all(ld.values(elMain.dataset).map(d => fetch(d)))
 )
 .then(() => render(
   <Router history={hashHistory}>
-    <Route path="/">
-      <IndexRoute component={Main}/>
-      <Route path="about" component={About}/>
-      <Route path="person/:personId" component={Person}/>
+    <Route path='/'>
+      <IndexRoute component={Main} />
+      <Route path='about' component={About} />
+      <Route path='person/:personId' component={Person} />
     </Route>
   </Router>,
   elMain
