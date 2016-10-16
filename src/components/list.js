@@ -6,6 +6,8 @@ import {Link} from 'react-router'
 import {Question} from './question'
 
 
+const formatNumber = new Intl.NumberFormat('el').format
+
 const pageRange = 3
 
 function genPagination(page, questionCount) {
@@ -36,6 +38,7 @@ export function ListControls(props) {
         {props.questionCount}{`${props.questionCount == 1
                                       ? " αποτέλεσμα"
                                       : " αποτελέσματα"}`}
+        {formatNumber(props.questionCount)}{`${props.questionCount === 1
       </p>
       <ListPager
         page={props.page}
