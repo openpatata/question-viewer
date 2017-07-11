@@ -113,6 +113,8 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
+
+  a:hover { text-decoration: underline; }
 }
 
 .question-text {
