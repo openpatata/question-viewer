@@ -18,6 +18,7 @@
       padding: 0 1.5em;
       padding-bottom: 2px;
       border: none;
+      border-right: 1px solid #ddd;
       border-radius: 0;
       background-color: #eee;
       background-repeat: no-repeat;
@@ -27,6 +28,7 @@
       &:focus {
         outline: none;
         background-color: yellow;
+        border-right-color: darken(yellow, 7%);
       }
     }
 
@@ -38,10 +40,12 @@
 
     select {
       flex-basis: 35%;
-      border-left:  1px solid #ddd;
-      border-right: 1px solid #ddd;
       background-image: inline("./../assets/dropdown-arrow.svg");
       background-position: calc(100% - 1.5rem) 50%;
+
+      &:focus {
+        box-shadow: -1.3px 0 0 darken(yellow, 7%);
+      }
     }
   }
 
