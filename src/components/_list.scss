@@ -1,5 +1,6 @@
 
 .list-controls,
+.vis-switcher-container,
 .question-list {
   @extend %content-container;
   position: relative;
@@ -40,6 +41,67 @@
 
     span {
       font-size: .9em;
+    }
+  }
+}
+
+
+.vis-switcher-container {
+  overflow: hidden;
+  border-top: 1px solid #ccc;
+}
+
+.vis-switcher {
+  @extend %bulletless-list;
+  float: right;
+  margin: 0 -2px 1em 0;
+  border: 1px solid #eee;
+  border-top: none;
+  border-bottom-left-radius:  3px;
+  border-bottom-right-radius: 3px;
+  line-height: 2.5em;
+
+  &__option {
+    display: inline-block;
+    width: 3em;
+
+    a {
+      display: block;
+      background-position: 50%;
+      background-repeat: no-repeat;
+      background-size: contain;
+      text-indent: -9999px;
+    }
+
+    & + & {
+      border-left: 1px solid #eee;
+    }
+
+    &--hide a,
+    &--map a,
+    &--graph a {
+      cursor: not-allowed;
+      opacity: .3;
+    }
+
+    &--hide a {
+      background-image: inline("./../assets/vis-hide.svg");
+    }
+
+    &--histogram a {
+      background-image: inline("./../assets/vis-histogram.svg");
+    }
+
+    &--map a {
+      background-image: inline("./../assets/vis-map.svg");
+    }
+
+    &--graph a {
+      background-image: inline("./../assets/vis-graph.svg");
+    }
+
+    &.selected {
+      // background-color: #eee;
     }
   }
 }

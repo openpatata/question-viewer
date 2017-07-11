@@ -19,6 +19,17 @@ const months = [
   'Δεκ'
 ]
 
+d3.timeFormatDefaultLocale({
+  date: '%d/%m/%y',
+  time: '%H:%M:%S',
+  dateTime: '%A, %e %B',
+  days: days,
+  periods: ['π.μ.', 'μ.μ.'],
+  shortDays: days,
+  months: months,
+  shortMonths: months
+})
+
 const margin = {top: 0, right: 0, bottom: 20, left: 0}
 const width = 590 - margin.left - margin.right
 const height = 180 - margin.top - margin.bottom
@@ -33,7 +44,7 @@ function selectInterval (dateDiff) {
   }
 }
 
-function drawChart (chart, questionDates) {
+function drawHistogram (chart, questionDates) {
   if (!questionDates) return
 
   const data = questionDates.map(i => new Date(i.date))
@@ -78,27 +89,43 @@ function drawChart (chart, questionDates) {
     .text(d => d.length)
 }
 
-export const TimeSeries = React.createClass({
+export const Vis = React.createClass({
   componentDidMount () {
-    d3.timeFormatDefaultLocale({
-      date: '%d/%m/%y',
-      time: '%H:%M:%S',
-      dateTime: '%A, %e %B',
-      days: days,
-      periods: ['π.μ.', 'μ.μ.'],
-      shortDays: days,
-      months: months,
-      shortMonths: months
-    })
-    drawChart(this.refs.chart, this.props.questionDates)
+    drawHistogram(this.refs.chart, this.props.questionDates)
   },
 
   shouldComponentUpdate (props) {
-    drawChart(this.refs.chart, props.questionDates)
+    drawHistogram(this.refs.chart, props.questionDates)
     return false
   },
 
   render () {
-    return <div className='time-series' ref='chart' />
+    return (
+      <div>
+        <div className='time-series' ref='chart' />
+        <VisSwitcher />
+      </div>
+    )
   }
 })
+
+function VisSwitcher () {
+  return (
+    <div className='vis-switcher-container'>
+      <ul className='vis-switcher' aria-label='Επιλογή γραφικής παράστασης'>
+        <li className='vis-switcher__option vis-switcher__option--hide'>
+          <a title='Καμία'>Καμία</a>
+        </li>
+        <li className='vis-switcher__option vis-switcher__option--histogram selected'>
+          <a title='Ιστόγραμμα'>Ιστόγραμμα</a>
+        </li>
+        <li className='vis-switcher__option vis-switcher__option--map'>
+          <a title='Χάρτης'>Χάρτης</a>
+        </li>
+        <li className='vis-switcher__option vis-switcher__option--graph'>
+          <a title='Γράφος'>Γράφος</a>
+        </li>
+      </ul>
+    </div>
+  )
+}

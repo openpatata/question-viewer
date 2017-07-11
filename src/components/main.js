@@ -8,7 +8,7 @@ import {db} from '../index'
 import {ListForm} from './form'
 import {List, ListControls} from './list'
 import {Load} from './load'
-import {TimeSeries} from './timeSeries'
+import {Vis} from './vis'
 
 
 function parseBool (value) {
@@ -152,12 +152,12 @@ export const Main = withRouter(React.createClass({
         'Ερωτήσεις Κυπρίων Βουλευτών'
       }>
         <div className='__main'>
+          <Vis questionDates={this.state.questionDates} />
           <ListControls
             questionCount={this.state.questionCount}
             page={this.state.page}
             updateHash={this.updateHash}
           />
-          <TimeSeries questionDates={this.state.questionDates} />
           <ListForm
             defaultSearchField={this.state.searchField}
             defaultSearchValue={this.state.searchValue}

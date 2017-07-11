@@ -3,6 +3,14 @@
   @extend %content-container;
   padding: 2em;
   padding-bottom: 0;
+
+  .axis--x > path {
+    stroke: none;
+  }
+
+  .axis--x > .tick > line {
+    stroke: #ddd;
+  }
 }
 
 
