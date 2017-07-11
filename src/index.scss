@@ -38,13 +38,14 @@ a {
 body {
   margin: 2em 0;
   font-family: sans-serif;
-  line-height: 1.8;
-  color: #111;
-  -webkit-font-feature-settings: "liga" on, "calt" on;
-  font-feature-settings: "liga" on, "calt" on;
+  font-feature-settings: "kern",
+                         "liga",
+                         "clig",
+                         "calt";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+  line-height: 1.8;
+  color: #111;
 }
 
 
