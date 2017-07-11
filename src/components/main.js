@@ -15,6 +15,49 @@ function parseBool (value) {
   return value === true || value === 'true'
 }
 
+function filterResults (searchValue) {
+  let searchString = searchValue
+  try {
+    searchString = new RegExp(searchString, 'i')
+  } catch (e) { }
+
+  return {
+    '*' () {
+      return ({$or: [
+        this.by(),
+        this.date(),
+        this.identifier(),
+        this.settlement(),
+        this.text()
+      ]})
+    },
+
+    by () {
+      return {by: {
+        mp_id: db.collection('mps').find({name: {el: searchString}}).map(mp => mp._id)
+      }}
+    },
+
+    date () {
+      return {date: searchString}
+    },
+
+    identifier () {
+      return {identifier: searchString}
+    },
+
+    settlement () {
+      return {_id: ld(db.collection('question_settlements').find({
+        _id: db.collection('settlements').find({name: searchString}).map(s => s._id)
+      })).map(l => l.question_ids).flatten().uniq().value()}
+    },
+
+    text () {
+      return {text: searchString}
+    }
+  }
+}
+
 /**
  * Here's how this app works:
  *
@@ -30,7 +73,7 @@ function parseBool (value) {
  */
 
 function fetchData (prevState, {
-  page = 0, searchField = 'all', searchValue = null,
+  page = 0, searchField = '*', searchValue = null,
   showAnswered = true, showUnanswered = true
 }) {
   return new Promise((resolve, reject) => setTimeout(() => {
@@ -59,43 +102,7 @@ function fetchData (prevState, {
     }
 
     if (searchValue) {
-      params = Object.assign({}, params, (() => {
-        let searchString
-        try {
-          searchString = new RegExp(searchValue, 'i')
-        } catch (e) {
-          searchString = searchValue
-        }
-
-        if (searchField === 'all') {
-          return {
-            $or: ['date', 'identifier', 'text']
-              .map(v => ({[v]: searchString}))
-              .concat({by: {
-                mp_id: db.collection('mps')
-                  .find({name: {el: searchString}}).map(mp => mp._id)
-              }})
-          }
-        } else if (searchField === 'by') {
-          return {[searchField]: {
-            mp_id: db.collection('mps')
-              .find({name: {el: searchString}}).map(mp => mp._id)
-          }}
-        } else if (searchField === 'settlement') {
-          return {
-            _id: ld(db.collection('question_settlements').find({
-              _id: db.collection('settlements').find({name: searchString})
-                .map(s => s._id)
-            }))
-            .map(l => l.question_ids)
-            .flatten()
-            .uniq()
-            .value()
-          }
-        } else {
-          return {[searchField]: searchString}
-        }
-      })())
+      params = Object.assign({}, params, filterResults(searchValue)[searchField]())
     }
 
     return resolve({

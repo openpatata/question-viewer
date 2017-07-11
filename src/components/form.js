@@ -22,7 +22,7 @@ export function ListForm (props) {
         <select arial-label='Επιλογή πεδίων'
             defaultValue={props.defaultSearchField}
             onChange={e => props.updateHash({page: 0, searchField: e.target.value})}>
-          <option value='all'>Όλα τα πεδία</option>
+          <option value='*'>Όλα τα πεδία</option>
           <option value='by'>Ερωτώντες</option>
           <option value='date'>Ημερομηνία</option>
           <option value='identifier'>Αριθμός</option>
