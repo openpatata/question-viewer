@@ -1,7 +1,7 @@
 
 import marked from 'marked'
 import React from 'react'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 
 
 function QuestionHeader (props) {
@@ -26,7 +26,7 @@ function QuestionHeader (props) {
                   </Link>
                 </div>
               </li>
-             ))}
+            ))}
           </ul>
         </li>
         <li aria-label='Ημερομηνία' className='question-metadata__date'>

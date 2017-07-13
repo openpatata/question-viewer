@@ -1,0 +1,4 @@
+plugins:
+  autoprefixer: {}
+  postcss-assets: {}
+  postcss-svgo: {}

@@ -1,7 +1,7 @@
 
 import ld from 'lodash'
 import React from 'react'
-import {Link} from 'react-router'
+import {Link} from 'react-router-dom'
 
 import {Question} from './question'
 
@@ -59,9 +59,9 @@ function ListPager (props) {
                                           : ''}`}
             key={page}>
           {typeof page === 'string' ? '…'
-           : <Link onClick={() => props.updateHash({page: page})}>
+           : <a onClick={() => props.updateHash({page: page})}>
              {page + 1}
-           </Link>}
+           </a>}
         </li>
       ))}
     </ul>

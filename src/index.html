@@ -8,9 +8,6 @@
     <title>Ερωτήσεις Κυπρίων Βουλευτών</title>
   </head>
   <body>
-    <noscript>
-      <p>Η JavaScript είναι απαραίτητη για τη λειτουργία της ιστοσελίδας.</p>
-    </noscript>
     <header class="site-header">
       <div>
         <h1 class="page-title">ΕΡΩΤΗΣΕΙΣ ΒΟΥΛΕΥΤΩΝ</h1>
@@ -31,11 +28,14 @@
         </ul>
       </nav>
     </header>
-    <main <% ['electoral_districts', 'mps', 'parliamentary_periods',
-              'parties', 'question_settlements', 'questions', 'settlements'
-              ].forEach(v => { %>data-<%= v.replace('_', '-') %>-url="<%=
-        webpack.assets[_.findIndex(webpack.assets,
-                                   o => _.startsWith(o.name, `${v}.`))].name %>"<% }) %>>
+    <main<% ['electoral_districts', 'mps', 'parliamentary_periods',
+             'parties', 'question_settlements', 'questions', 'settlements'
+             ].forEach(v => { %> data-<%= v.replace('_', '-') %>-url="<%=
+             webpack.assets[_.findIndex(webpack.assets,
+                                        o => _.startsWith(o.name, `${v}.`))].name %>"<% }) %>>
+      <noscript>
+        <p>Η JavaScript είναι απαραίτητη για τη λειτουργία της ιστοσελίδας.</p>
+      </noscript>
     </main>
   </body>
 </html>

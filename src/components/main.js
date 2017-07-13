@@ -1,10 +1,9 @@
 
 import ld from 'lodash'
 import React from 'react'
-import {withRouter} from 'react-router'
 import DocumentTitle from 'react-document-title'
 
-import {db} from '../index'
+import {db, history} from '../index'
 import {ListForm} from './form'
 import {List, ListControls} from './list'
 import {Load} from './load'
@@ -128,21 +127,27 @@ function fetchData (prevState, {
   }))
 }
 
-export const Main = withRouter(React.createClass({
+export const Main = React.createClass({
   componentWillMount () {
-    this.props.router.listen(() => this.setState(
-      // State must be non-empty to trigger UI update
-      {questions: null},
-      () => fetchData(this.state, this.props.location.query)
-        .then(nextState => this.setState(nextState))
-        .catch(queryCorrection => this.updateHash(queryCorrection))
-    ))
+    history.listen(this.updateState)
+    this.updateState() // Force update on init
   },
 
   updateHash (values = {}) {
-    this.props.router.push({
-      query: Object.assign({}, this.props.location.query, values)
+    history.push({
+      query: Object.assign({}, history.location.query, values)
     })
+  },
+
+  updateState () {
+    this.setState(
+      // State must be non-empty to effect UI update -
+      // this brings up the spinning cog
+      {questions: null},
+      () => fetchData(this.state, history.location.query)
+        .then(nextState => this.setState(nextState))
+        .catch(queryCorrection => this.updateHash(queryCorrection))
+    )
   },
 
   render () {
@@ -171,4 +176,4 @@ export const Main = withRouter(React.createClass({
       </DocumentTitle>
     )
   }
-}))
+})

@@ -4,23 +4,22 @@ import ld from 'lodash'
 import webpack from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 
-import autoprefixer from 'autoprefixer'
-import assets from 'postcss-assets'
-import svgo from 'postcss-svgo'
-
 
 let config = {
   entry: ['whatwg-fetch', './src/index'],
-  output: {path: './question-viewer', filename: 'bundle.[hash].js'},
+  output: {path: `${__dirname}/question-viewer`, filename: 'bundle.[hash].js'},
   plugins: [
     new HtmlWebpackPlugin({template: './src/index.html'})
   ],
-  module: {loaders: [
-    {test: /\.js$/, exclude: /node_modules/, loader: 'babel?presets[]=es2015'},
-    {test: /\.json$/, loader: 'file?name=[name].[hash].[ext]'},
-    {test: /\.scss$/, loader: 'style!css!postcss!sass'}
+  module: {rules: [
+    {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader?presets[]=es2015'},
+    {test: /\.json$/, loader: 'file-loader?name=[name].[hash].[ext]'},
+    {test: /\.scss$/, loader: 'style-loader!css-loader!postcss-loader!sass-loader'},
+    {test: /CNAME$/, loader: 'file-loader?name=[name]'}
   ]},
-  postcss: [assets(), autoprefixer(), svgo()]
+  resolve: {alias: {
+    forerunnerdb: `${__dirname}/node_modules/forerunnerdb/js/builds/all.js`
+  }}
 }
 
 if (process.env.NODE_ENV === 'production') {
@@ -32,7 +31,7 @@ if (process.env.NODE_ENV === 'production') {
   }, (objValue, srcValue) => ld.isArray(objValue) && objValue.concat(srcValue))
 } else {
   config = ld.merge(config, {
-    devtool: 'eval-source-map', devServer: {contentBase: './build'}
+    devtool: 'eval-source-map', devServer: {contentBase: `${__dirname}/build`}
   })
 }
 
