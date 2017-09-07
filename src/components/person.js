@@ -14,7 +14,7 @@ function selectLink (links, url) {
 export const Person = React.createClass({
   componentWillMount () {
     new Promise(resolve => setTimeout(() => resolve(
-      db.collection('mps').findOne({_id: this.props.params.personId}, {
+      db.collection('mps').findOne({_id: this.props.match.params.personId}, {
         $join: [{electoral_districts: {
           _id: 'tenures.electoral_district_id',
           $as: '__electoral_districts',
